@@ -1,0 +1,2492 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEKIGO - DEKIru keiGO | Belajar Bahasa Jepang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=Noto+Sans+JP:wght@400;700;900&family=Poppins:wght@400;600;700;800&family=Russo+One&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+  <style>
+    body { box-sizing: border-box; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(0, 51, 102, 0.5); } 50% { box-shadow: 0 0 40px rgba(0, 51, 102, 0.8), 0 0 60px rgba(0, 51, 102, 0.4); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-100px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+    @keyframes bounce-soft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .float-animation { animation: float 3s ease-in-out infinite; }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+    .slide-in-right { animation: slideInRight 0.8s ease-out forwards; }
+    .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+    .bounce-soft { animation: bounce-soft 2s ease-in-out infinite; }
+    .shimmer-text { background: linear-gradient(90deg, #003366, #ff6b6b, #ffd93d, #003366); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 3s linear infinite; }
+    
+    /* Font Classes */
+    .logo-text { font-family: 'Zen Dots', cursive; }
+    .title-font { font-family: 'Russo One', sans-serif; letter-spacing: 1px; }
+    .subtitle-font { font-family: 'Montserrat', sans-serif; font-weight: 800; }
+    
+    .jp-text { font-family: 'Noto Sans JP', sans-serif; }
+    .main-font { font-family: 'Poppins', sans-serif; }
+    .bg-ub-blue { background-color: #003366; }
+    .text-ub-blue { color: #003366; }
+    .border-ub-blue { border-color: #003366; }
+    .slide { opacity: 0; transform: translateX(100%); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; }
+    .slide.active { opacity: 1; transform: translateX(0); position: relative; pointer-events: auto; }
+    .slide.exit-left { opacity: 0; transform: translateX(-100%); }
+    .menu-btn { transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .menu-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s ease; }
+    .menu-btn:hover::before { left: 100%; }
+    .menu-btn:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 51, 102, 0.4); }
+    .glass-effect { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .card-hover { transition: all 0.4s ease; cursor: pointer; }
+    .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 51, 102, 0.3); }
+    .highlight-red { color: #ff4757; text-shadow: 0 0 15px rgba(255, 71, 87, 0.6); }
+    .highlight-gold { color: #ffd93d; text-shadow: 0 0 15px rgba(255, 217, 61, 0.6); }
+    .bg-blur { filter: blur(5px); }
+    
+    /* Scrollbar Styling */
+    .content-section, #reading-scroll-area { max-height: 100%; overflow-y: auto; }
+    .content-section::-webkit-scrollbar, #reading-scroll-area::-webkit-scrollbar { width: 8px; }
+    .content-section::-webkit-scrollbar-track, #reading-scroll-area::-webkit-scrollbar-track { background: rgba(0, 51, 102, 0.1); border-radius: 10px; }
+    .content-section::-webkit-scrollbar-thumb, #reading-scroll-area::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #003366, #005599); border-radius: 10px; }
+    
+    .quiz-locked { opacity: 0.5; pointer-events: none; filter: grayscale(80%); position: relative; }
+    .quiz-locked::after { content: '🔒'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; }
+    
+    .exercise-completed { border-color: #4ade80 !important; background: linear-gradient(to right, rgba(74, 222, 128, 0.2), rgba(74, 222, 128, 0.1)) !important; }
+    .check-mark { display: none; }
+    .exercise-completed .check-mark { display: inline-block; color: #4ade80; font-weight: bold; margin-left: 8px; }
+
+    .iframe-container { width: 100%; height: 100%; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); background: white; }
+    .text-strong-shadow { text-shadow: 2px 2px 0px rgba(0,0,0,0.3), 0 0 20px rgba(0,0,0,0.5); }
+    
+    /* Custom style for materials */
+    .chat-bubble-left { background: #f1f5f9; border-radius: 20px 20px 20px 0; padding: 12px 16px; margin-bottom: 8px; position: relative; }
+    .chat-bubble-right { background: #dbeafe; border-radius: 20px 20px 0 20px; padding: 12px 16px; margin-bottom: 8px; text-align: right; margin-left: auto; }
+    .material-table th { background: linear-gradient(90deg, #f8fafc, #f1f5f9); color: #334155; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; padding: 12px; }
+    .material-table td { padding: 12px; border-top: 1px solid #e2e8f0; }
+    .material-card { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); overflow: hidden; margin-bottom: 2rem; }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full main-font overflow-hidden">
+  <div id="app" class="relative w-full h-full">
+   <div id="background-container" class="fixed inset-0 z-0 transition-all duration-500">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800"></div>
+    <div class="absolute inset-0 opacity-30" style="background-image: url('https://i.ibb.co/HD8jXH7m/image.png'); background-size: cover; background-position: center;"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
+   </div>
+   
+   <div id="slides-container" class="relative w-full h-full z-10">
+
+    <div id="slide-1" class="slide active">
+      <div class="w-full h-full flex flex-col">
+        <header class="w-full py-4 px-6 text-center">
+         <p id="slogan-header" class="text-lg md:text-xl text-white font-semibold">Belajar <span class="jp-text highlight-red text-2xl">敬語</span> Menjadi <span class="jp-text highlight-gold text-2xl">楽しい</span></p>
+        </header>
+        <main class="flex-1 flex flex-col items-center justify-center px-4 pb-20">
+         <div class="flex items-center justify-center gap-4 md:gap-8 lg:gap-16 w-full max-w-6xl">
+          
+          <div class="slide-in-left hidden md:block">
+           <div class="float-animation group">
+            <div class="w-32 lg:w-48 h-40 lg:h-56 flex items-center justify-center p-2 transition-transform duration-300 group-hover:scale-110" style="filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));">
+             <svg viewbox="0 0 100 120" class="w-full h-full" style="overflow: visible;">
+                <defs>
+                    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                
+                <g filter="url(#glow-blue)">
+                    <ellipse cx="50" cy="115" rx="30" ry="8" fill="#000000" opacity="0.4" /> <path d="M30 60 L70 60 L75 110 L25 110 Z" fill="#1e3a8a" stroke="white" stroke-width="2.5" stroke-linejoin="round"/> <path d="M50 60 L50 110" stroke="#172554" stroke-width="1.5" /> <path d="M30 60 L20 90 L28 95" fill="none" stroke="#1e3a8a" stroke-width="6" stroke-linecap="round"/> <path d="M70 60 L80 90 L72 95" fill="none" stroke="#1e3a8a" stroke-width="6" stroke-linecap="round"/> <path d="M50 60 L46 65 L50 90 L54 65 Z" fill="#facc15" stroke="white" stroke-width="1"/>
+
+                    <circle cx="50" cy="45" r="18" fill="#ffedd5" stroke="white" stroke-width="2.5"/> <path d="M30 38 Q50 20 70 38" fill="#1e293b" stroke="white" stroke-width="2"/> <path d="M30 38 Q28 50 32 55" fill="#1e293b" stroke="white" stroke-width="1"/> <path d="M70 38 Q72 50 68 55" fill="#1e293b" stroke="white" stroke-width="1"/> <g stroke="#334155" stroke-width="1.5" fill="rgba(255,255,255,0.3)">
+                        <rect x="36" y="42" width="12" height="8" rx="2" />
+                        <rect x="52" y="42" width="12" height="8" rx="2" />
+                        <line x1="48" y1="46" x2="52" y2="46" />
+                    </g>
+
+                    <circle cx="28" cy="95" r="4.5" fill="#ffedd5" stroke="white" stroke-width="1.5"/>
+                    <circle cx="72" cy="95" r="4.5" fill="#ffedd5" stroke="white" stroke-width="1.5"/>
+                </g>
+             </svg>
+            </div>
+            <p class="text-white text-lg font-bold text-center mt-2 jp-text drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">先生 </p>
+           </div>
+          </div>
+          <div class="text-center fade-in-up">
+           <div class="mb-6 bounce-soft">
+               <a href="https://ibb.co.com/xSmpS1nF" target="_blank">
+                   <img src="https://i.ibb.co.com/d0bd0PNm/Logo-Universitas-Brawijaya-svg.png" alt="Logo Universitas Brawijaya" class="w-20 h-20 md:w-24 md:h-24 mx-auto" style="border-radius:50%" border="0">
+               </a>
+           </div>
+           
+           <h1 class="title-font text-6xl md:text-8xl lg:text-9xl mb-4 text-strong-shadow transition-transform hover:scale-105 duration-300">
+             <span class="highlight-red">DEKI</span><span class="highlight-gold">GO</span>
+           </h1>
+           
+           <p class="text-white text-xl md:text-2xl mb-8 tracking-widest subtitle-font uppercase drop-shadow-md bg-black/40 backdrop-blur-sm py-2 px-8 rounded-full inline-block border border-white/20 shadow-lg">
+             <span class="highlight-red">DEKI</span><span class="text-white text-base md:text-lg">RU</span> <span class="text-white text-base md:text-lg">KEI</span><span class="highlight-gold">GO</span>
+           </p>
+
+           <p class="jp-text text-white/90 text-sm md:text-base mb-8 font-bold tracking-wide drop-shadow-md">できる敬語 - Bisa Ragam Hormat dan Sopan Bahasa Jepang</p>
+           <button onclick="goToSlide(2)" class="pulse-glow px-12 py-5 bg-gradient-to-r from-red-600 to-rose-600 text-white text-xl font-bold rounded-full hover:from-red-500 hover:to-rose-500 transition-all duration-300 transform hover:scale-105 shadow-[0_0_25px_rgba(225,29,72,0.6)] border-2 border-white/20 ring-2 ring-red-500/30"> 
+            <span class="jp-text mr-2">始めましょう</span> 
+            <span class="block text-sm font-normal mt-1 opacity-90">Mulai Belajar</span> 
+           </button>
+          </div>
+          
+          <div class="slide-in-right hidden md:block">
+           <div class="float-animation group" style="animation-delay: 0.5s;">
+            <div class="w-32 lg:w-48 h-40 lg:h-56 flex items-center justify-center p-2 transition-transform duration-300 group-hover:scale-110" style="filter: drop-shadow(0 0 15px rgba(244, 63, 94, 0.6));">
+             <svg viewbox="0 0 100 120" class="w-full h-full" style="overflow: visible;">
+                <defs>
+                    <filter id="glow-red" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <g filter="url(#glow-red)">
+                    <ellipse cx="50" cy="115" rx="30" ry="8" fill="#000000" opacity="0.4" /> <path d="M35 65 L65 65 L70 95 L30 95 Z" fill="#f43f5e" stroke="white" stroke-width="2.5" stroke-linejoin="round"/> <path d="M30 95 L25 110 L75 110 L70 95 Z" fill="#be123c" stroke="white" stroke-width="2.5" stroke-linejoin="round"/> <path d="M50 68 L42 62 L50 74 L58 62 Z" fill="#fbbf24" stroke="white" stroke-width="1.5"/>
+
+                    <path d="M35 65 L20 85 L26 90" fill="none" stroke="#f43f5e" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M65 65 L80 85 L74 90" fill="none" stroke="#f43f5e" stroke-width="5" stroke-linecap="round"/>
+
+                    <circle cx="50" cy="48" r="17" fill="#ffedd5" stroke="white" stroke-width="2.5"/> <path d="M28 45 Q50 25 72 45" fill="#475569" stroke="white" stroke-width="2"/> <path d="M25 45 Q20 60 28 65" fill="#475569" stroke="white" stroke-width="2"/> <path d="M75 45 Q80 60 72 65" fill="#475569" stroke="white" stroke-width="2"/> <circle cx="45" cy="48" r="1.5" fill="#1e293b"/> <circle cx="55" cy="48" r="1.5" fill="#1e293b"/> <path d="M48 56 Q50 58 52 56" fill="none" stroke="#be123c" stroke-width="1" stroke-linecap="round"/> <circle cx="26" cy="90" r="4" fill="#ffedd5" stroke="white" stroke-width="1.5"/>
+                    <circle cx="74" cy="90" r="4" fill="#ffedd5" stroke="white" stroke-width="1.5"/>
+                </g>
+             </svg>
+            </div>
+            <p class="text-white text-lg font-bold text-center mt-2 jp-text drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">学生 </p>
+           </div>
+          </div>
+         </div>
+        </main>
+        <footer class="w-full py-3 px-4 text-center bg-gradient-to-r from-slate-900/90 via-blue-900/90 to-slate-900/90 border-t border-white/10">
+         <p class="text-white/60 text-xs md:text-sm">Created by <span id="creator-name" class="text-white font-semibold">Muhammad Rizal Nugraha</span> - Mahasiswa Pendidikan Bahasa Jepang Universitas Brawijaya</p>
+         <p class="text-white/40 text-xs mt-1">Copyright ©2026 | <span class="jp-text">著作権</span></p>
+        </footer>
+       </div>
+    </div>
+
+    <div id="slide-2" class="slide">
+        <div class="w-full h-full flex flex-col">
+        <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+         <p class="text-lg md:text-xl text-white font-semibold">Belajar <span class="jp-text highlight-red text-2xl">敬語</span> Menjadi <span class="jp-text highlight-gold text-2xl">楽しい</span></p>
+         <h2 class="title-font text-3xl md:text-4xl text-white mt-2 tracking-wide text-strong-shadow">DEKIGO</h2>
+        </header>
+        <main class="flex-1 flex flex-col items-center justify-center px-4 py-6 content-section">
+         <h3 class="text-2xl md:text-3xl text-white font-bold mb-8 text-center"><span class="jp-text">メニュー</span> Menu Utama</h3>
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full px-4">
+          <button onclick="goToSlide(3)" class="menu-btn card-hover p-6 rounded-2xl bg-gradient-to-br from-pink-600 to-rose-600 text-white text-left group shadow-lg shadow-pink-900/20">
+           <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">🎯</div>
+            <div>
+             <h4 class="text-xl font-bold">Tujuan &amp; Capaian</h4>
+             <p class="text-white/90 text-sm jp-text font-medium">学習目標</p>
+            </div>
+           </div>
+          </button>
+          <button onclick="goToSlide(4)" class="menu-btn card-hover p-6 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white text-left group">
+           <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-3xl">📚</div>
+            <div>
+             <h4 class="text-xl font-bold">Materi</h4>
+             <p class="text-white/70 text-sm jp-text">教材</p>
+            </div>
+           </div>
+          </button> 
+          <button onclick="goToSlide(5)" class="menu-btn card-hover p-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white text-left group">
+           <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-3xl">🎮</div>
+            <div>
+             <h4 class="text-xl font-bold">Quiz &amp; Games</h4>
+             <p class="text-white/70 text-sm jp-text">クイズとゲーム</p>
+            </div>
+           </div>
+          </button> 
+          <button onclick="goToSlide(6)" class="menu-btn card-hover p-6 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 text-white text-left group">
+           <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-3xl">ℹ️</div>
+            <div>
+             <h4 class="text-xl font-bold">Tentang</h4>
+             <p class="text-white/70 text-sm jp-text">について</p>
+            </div>
+           </div>
+          </button>
+         </div>
+         <button onclick="goToSlide(1)" class="mt-8 px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all flex items-center gap-2"> <span>←</span> <span class="jp-text">戻ります</span></button>
+        </main>
+        <footer class="w-full py-3 px-4 text-center bg-gradient-to-r from-slate-900/90 via-blue-900/90 to-slate-900/90 border-t border-white/10">
+         <p class="text-white/60 text-xs md:text-sm">Created by <span class="text-white font-semibold">Muhammad Rizal Nugraha</span> - Mahasiswa Pendidikan Bahasa Jepang Universitas Brawijaya</p>
+        </footer>
+       </div>
+    </div>
+
+<div id="slide-3" class="slide">
+        <div class="w-full h-full flex flex-col">
+        <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+         <p class="text-lg md:text-xl text-white font-semibold">Belajar <span class="jp-text highlight-red text-2xl">敬語</span> Menjadi <span class="jp-text highlight-gold text-2xl">楽しい</span></p>
+         <h2 class="title-font text-3xl md:text-4xl text-white mt-2 tracking-wide text-strong-shadow">DEKIGO</h2>
+        </header>
+        <main class="flex-1 px-4 py-6 content-section overflow-y-auto">
+         <div class="max-w-4xl mx-auto">
+          <h3 class="text-2xl md:text-3xl text-white font-bold mb-6 text-center">🎯 <span class="jp-text">学習目標</span> - Tujuan &amp; Capaian Pembelajaran</h3>
+          <div class="space-y-6">
+           
+           <div class="p-6 rounded-2xl bg-gradient-to-br from-sky-500/30 to-cyan-500/30 border border-sky-300/40 shadow-lg shadow-sky-900/20 backdrop-blur-md transform hover:scale-[1.02] transition-transform duration-300">
+            <h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span class="text-2xl drop-shadow-md">📌</span> Tujuan Pembelajaran</h4>
+            <ul class="space-y-3 text-white/95 font-medium">
+             <li class="flex items-start gap-3"><span class="text-sky-200 mt-1 font-bold text-lg">▸</span> <span>Memahami penggunaan bentuk ungkapan yang digunakan untuk mengekspresikan ragam hormat atau sopan bahasa Jepang</span></li>
+             <li class="flex items-start gap-3"><span class="text-sky-200 mt-1 font-bold text-lg">▸</span> <span>Memahami apa itu 丁寧語 (Teineigo), 尊敬語 (Sonkeigo), dan 謙譲語 (Kenjougo)</span></li>
+            </ul>
+           </div>
+
+           <div class="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-300/40 shadow-lg shadow-indigo-900/20 backdrop-blur-md transform hover:scale-[1.02] transition-transform duration-300">
+            <h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span class="text-2xl drop-shadow-md">🏆</span> Capaian Pembelajaran</h4>
+            <ul class="space-y-3 text-white/95 font-medium">
+             <li class="flex items-start gap-3"><span class="text-indigo-200 mt-1 font-bold text-lg">✓</span> <span>Mampu membedakan tiga jenis 敬語 (keigo) : 丁寧語 (Teineigo), 尊敬語 (Sonkeigo), dan 謙譲語 (Kenjougo)</span></li>
+             <li class="flex items-start gap-3"><span class="text-indigo-200 mt-1 font-bold text-lg">✓</span> <span>Mampu menggunakan 丁寧語 (Teineigo), 尊敬語 (Sonkeigo), dan 謙譲語 (Kenjougo) dalam bentuk kalimat</span></li>
+             <li class="flex items-start gap-3"><span class="text-indigo-200 mt-1 font-bold text-lg">✓</span> <span>Mampu menggunakan 丁寧語 (Teineigo), 尊敬語 (Sonkeigo), dan 謙譲語 (Kenjougo) dalam percakapan formal</span></li>
+            </ul>
+           </div>
+
+          </div>
+          <div class="flex justify-center gap-4 mt-8"><button onclick="goToSlide(2)" class="px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all flex items-center gap-2"> <span>←</span> <span class="jp-text">戻ります</span> </button> <button onclick="goToSlide(4)" class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2"> <span>Materi</span> <span>→</span> </button>
+          </div>
+         </div>
+        </main>
+        <footer class="w-full py-3 px-4 text-center bg-gradient-to-r from-slate-900/90 via-blue-900/90 to-slate-900/90 border-t border-white/10">
+         <p class="text-white/60 text-xs md:text-sm">Created by <span class="text-white font-semibold">Muhammad Rizal Nugraha</span> - Mahasiswa Pendidikan Bahasa Jepang Universitas Brawijaya</p>
+        </footer>
+       </div>
+    </div>
+
+    <div id="slide-4" class="slide">
+     <div class="w-full h-full flex flex-col">
+      <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+       <p class="text-lg md:text-xl text-white font-semibold">Belajar <span class="jp-text highlight-red text-2xl">敬語</span> Menjadi <span class="jp-text highlight-gold text-2xl">楽しい</span></p>
+       <h2 class="title-font text-3xl md:text-4xl text-white mt-2 tracking-wide text-strong-shadow">DEKIGO</h2>
+      </header>
+      
+      <main class="flex-1 px-4 py-6 content-section overflow-y-auto flex flex-col justify-center">
+       <div class="max-w-5xl mx-auto w-full">
+        <h3 class="text-2xl md:text-3xl text-white font-bold mb-6 text-center">📚 <span class="jp-text">教材</span> - Materi Pembelajaran</h3>
+        <p class="text-white/60 text-center mb-10">Pilih salah satu materi di bawah ini untuk mulai belajar!</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+         <button onclick="goToSlide(7)" class="group text-left h-full w-full p-6 rounded-2xl bg-gradient-to-br from-emerald-800/80 to-emerald-900/90 border border-emerald-400/40 shadow-lg shadow-emerald-900/30 card-hover relative overflow-hidden backdrop-blur-sm">
+            <div class="absolute inset-0 bg-emerald-400/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative z-10 flex flex-col items-center justify-center h-full">
+                <div class="text-5xl mb-6 text-center transform group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">🤝</div>
+                <h4 class="text-2xl font-bold text-white mb-2 text-center jp-text group-hover:text-emerald-300 transition-colors">丁寧語</h4>
+                <p class="text-emerald-200 text-center text-base mb-4 font-semibold tracking-wide">Teineigo</p>
+                <p class="text-white/90 text-sm leading-relaxed text-center font-medium">Bahasa sopan dasar (Desu/Masu).</p>
+                <div class="mt-6 px-6 py-2 rounded-full bg-emerald-950/30 text-emerald-100 text-xs border border-emerald-400/30 font-bold group-hover:bg-emerald-500/20 transition-all">Mulai Belajar →</div>
+            </div>
+         </button>
+
+         <button onclick="goToSlide(8)" class="group text-left h-full w-full p-6 rounded-2xl bg-gradient-to-br from-red-800/80 to-red-900/90 border border-red-400/40 shadow-lg shadow-red-900/30 card-hover relative overflow-hidden backdrop-blur-sm">
+            <div class="absolute inset-0 bg-red-400/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative z-10 flex flex-col items-center justify-center h-full">
+                <div class="text-5xl mb-6 text-center transform group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">👑</div>
+                <h4 class="text-2xl font-bold text-white mb-2 text-center jp-text group-hover:text-red-300 transition-colors">尊敬語</h4>
+                <p class="text-red-200 text-center text-base mb-4 font-semibold tracking-wide">Sonkeigo</p>
+                <p class="text-white/90 text-sm leading-relaxed text-center font-medium">Bahasa hormat untuk meninggikan posisi lawan bicara.</p>
+                <div class="mt-6 px-6 py-2 rounded-full bg-red-950/30 text-red-100 text-xs border border-red-400/30 font-bold group-hover:bg-red-500/20 transition-all">Mulai Belajar →</div>
+            </div>
+         </button>
+
+         <button onclick="goToSlide(9)" class="group text-left h-full w-full p-6 rounded-2xl bg-gradient-to-br from-blue-800/80 to-blue-900/90 border border-blue-400/40 shadow-lg shadow-blue-900/30 card-hover relative overflow-hidden backdrop-blur-sm">
+            <div class="absolute inset-0 bg-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative z-10 flex flex-col items-center justify-center h-full">
+                <div class="text-5xl mb-6 text-center transform group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">🙇</div>
+                <h4 class="text-2xl font-bold text-white mb-2 text-center jp-text group-hover:text-blue-300 transition-colors">謙譲語</h4>
+                <p class="text-blue-200 text-center text-base mb-4 font-semibold tracking-wide">Kenjougo</p>
+                <p class="text-white/90 text-sm leading-relaxed text-center font-medium">Bahasa hormat untuk merendahkan diri sendiri terhadap lawan bicara.</p>
+                <div class="mt-6 px-6 py-2 rounded-full bg-blue-950/30 text-blue-100 text-xs border border-blue-400/30 font-bold group-hover:bg-blue-500/20 transition-all">Mulai Belajar →</div>
+            </div>
+         </button>
+        </div>
+
+        <div class="flex justify-center gap-4">
+            <button onclick="goToSlide(2)" class="px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all flex items-center gap-2"> <span>←</span> <span class="jp-text">戻ります</span> </button> 
+            <button onclick="goToSlide(5)" class="px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all flex items-center gap-2"> <span>Quiz &amp; Games</span> <span>→</span> </button>
+        </div>
+       </div>
+      </main>
+      <footer class="w-full py-3 px-4 text-center bg-gradient-to-r from-slate-900/90 via-blue-900/90 to-slate-900/90 border-t border-white/10">
+       <p class="text-white/60 text-xs md:text-sm">Created by <span class="text-white font-semibold">Muhammad Rizal Nugraha</span> - Mahasiswa Pendidikan Bahasa Jepang Universitas Brawijaya</p>
+      </footer>
+     </div>
+    </div>
+
+    <div id="slide-5" class="slide">
+        <div class="w-full h-full flex flex-col">
+        <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+         <p class="text-lg md:text-xl text-white font-semibold">Belajar <span class="jp-text highlight-red text-2xl">敬語</span> Menjadi <span class="jp-text highlight-gold text-2xl">楽しい</span></p>
+         <h2 class="title-font text-3xl md:text-4xl text-white mt-2 tracking-wide text-strong-shadow">DEKIGO</h2>
+        </header>
+        <main class="flex-1 px-4 py-6 content-section overflow-y-auto">
+         <div class="max-w-lg mx-auto h-full flex flex-col justify-center">
+          <h3 class="text-2xl md:text-3xl text-white font-bold mb-8 text-center">🎮 <span class="jp-text">クイズのレベル</span> - Level Quiz</h3>
+          
+          <div class="flex flex-col gap-6">
+            <button onclick="goToSlide(12)" class="w-full p-5 rounded-2xl bg-gradient-to-r from-emerald-800 to-emerald-600 border border-emerald-400 text-white shadow-xl transform transition-transform hover:scale-105 flex items-center justify-between">
+                <div class="text-left">
+                    <h4 class="text-xl font-bold jp-text">丁寧語</h4>
+                    <p class="text-emerald-200 text-sm font-semibold">Teineigo (Level 1)</p>
+                </div>
+                <div class="text-3xl">🤝</div>
+            </button>
+            <div class="flex justify-center">
+                <div class="h-6 w-1 bg-white/20"></div>
+            </div>
+
+            <button id="btn-level-sonkeigo" onclick="goToSlide(13)" class="w-full p-5 rounded-2xl bg-gradient-to-r from-red-900 to-red-800 border border-red-400/50 text-white shadow-xl quiz-locked flex items-center justify-between">
+                <div class="text-left">
+                    <h4 class="text-xl font-bold jp-text">尊敬語</h4>
+                    <p class="text-red-200 text-sm font-semibold">Sonkeigo (Level 2)</p>
+                </div>
+                <div class="text-3xl">👑</div>
+            </button>
+            <div class="flex justify-center">
+                <div class="h-6 w-1 bg-white/20"></div>
+            </div>
+
+            <button id="btn-level-kenjougo" onclick="goToSlide(14)" class="w-full p-5 rounded-2xl bg-gradient-to-r from-blue-900 to-blue-800 border border-blue-400/50 text-white shadow-xl quiz-locked flex items-center justify-between">
+                <div class="text-left">
+                    <h4 class="text-xl font-bold jp-text">謙譲語</h4>
+                    <p class="text-blue-200 text-sm font-semibold">Kenjougo (Level 3)</p>
+                </div>
+                <div class="text-3xl">🙇</div>
+            </button>
+          </div>
+
+          <div class="flex justify-center gap-4 mt-12">
+            <button onclick="goToSlide(2)" class="px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all flex items-center gap-2"> <span>←</span> <span class="jp-text">戻ります</span> </button>
+            <button onclick="resetAllQuizzes()" class="px-6 py-3 rounded-full bg-red-500/20 border border-red-500/30 text-white hover:bg-red-500/40 text-sm">Reset Progress</button>
+          </div>
+         </div>
+        </main>
+        <footer class="w-full py-3 px-4 text-center bg-gradient-to-r from-slate-900/90 via-blue-900/90 to-slate-900/90 border-t border-white/10">
+         <p class="text-white/60 text-xs md:text-sm">Created by <span class="text-white font-semibold">Muhammad Rizal Nugraha</span> - Mahasiswa Pendidikan Bahasa Jepang Universitas Brawijaya</p>
+        </footer>
+       </div>
+    </div>
+
+    <div id="slide-12" class="slide">
+        <div class="w-full h-full flex flex-col">
+            <header class="w-full py-4 px-6 text-center bg-emerald-900/90 border-b border-emerald-500/30">
+                <h2 class="title-font text-2xl text-white">Quiz Level 1: <span class="jp-text">丁寧語</span></h2>
+            </header>
+            <main class="flex-1 px-4 py-6 content-section flex flex-col items-center">
+                <div class="max-w-4xl w-full space-y-6">
+                    <p class="text-center text-white/80 mb-6">Selesaikan kedua latihan di bawah ini untuk lanjut ke level berikutnya.</p>
+                    
+                    <div id="card-teineigo-1" class="p-6 rounded-2xl bg-slate-800/80 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl">📝</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Latihan 1: Dasar Teineigo <span class="check-mark">✓</span></h4>
+
+                            </div>
+                        </div>
+                        <button onclick="openQuizEmbed('teineigo', 1)" class="px-6 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-all w-full md:w-auto">Mulai</button>
+                    </div>
+
+                    <div id="card-teineigo-2" class="p-6 rounded-2xl bg-slate-800/80 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl">🎮</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Latihan 2: Game Interaktif <span class="check-mark">✓</span></h4>
+
+                            </div>
+                        </div>
+                        <button onclick="openQuizEmbed('teineigo', 2)" class="px-6 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-all w-full md:w-auto">Mulai</button>
+                    </div>
+
+                    <div id="action-teineigo" class="hidden mt-8 flex-col items-center gap-4 animate-bounce-soft">
+                        <p class="text-green-400 font-bold text-lg">🎉 Level Selesai!</p>
+                        <div class="flex gap-4">
+                            <button onclick="goToSlide(15)" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg">Lihat Pembahasan</button>
+                            <button onclick="unlockNextLevel('sonkeigo')" class="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-lg border border-white/20">Lanjut Level ➜</button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="goToSlide(5)" class="mt-auto mb-4 px-6 py-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all">Kembali ke Peta Level</button>
+            </main>
+            
+            <div id="modal-teineigo" class="hidden absolute inset-0 z-50 bg-slate-900/95 flex flex-col">
+                <div class="p-4 flex justify-between items-center border-b border-white/10">
+                    <h3 class="text-white font-bold">Latihan Quiz</h3>
+                    <div class="flex gap-2">
+                        <button onclick="markQuizDone('teineigo')" class="px-4 py-1 bg-green-600 rounded text-white text-sm">Tandai Selesai </button>
+                        <button onclick="closeQuizModal('teineigo')" class="text-white hover:text-red-400">✕ Tutup</button>
+                    </div>
+                </div>
+                <div class="flex-1 p-2">
+                     <iframe id="frame-teineigo" class="w-full h-full rounded-lg bg-white" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="slide-13" class="slide">
+        <div class="w-full h-full flex flex-col">
+            <header class="w-full py-4 px-6 text-center bg-red-900/90 border-b border-red-500/30">
+                <h2 class="title-font text-2xl text-white">Quiz Level 2: <span class="jp-text">尊敬語</span></h2>
+            </header>
+            <main class="flex-1 px-4 py-6 content-section flex flex-col items-center">
+                <div class="max-w-4xl w-full space-y-6">
+                    <p class="text-center text-white/80 mb-6">Selesaikan kedua latihan di bawah ini untuk lanjut ke level berikutnya.</p>
+                    
+                    <div id="card-sonkeigo-1" class="p-6 rounded-2xl bg-slate-800/80 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl">📝</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Latihan 1: Dasar Sonkeigo <span class="check-mark">✓</span></h4>
+
+                            </div>
+                        </div>
+                        <button onclick="openQuizEmbed('sonkeigo', 1)" class="px-6 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold transition-all w-full md:w-auto">Mulai</button>
+                    </div>
+
+                    <div id="card-sonkeigo-2" class="p-6 rounded-2xl bg-slate-800/80 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl">🎮</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Latihan 2: Game Interaktif <span class="check-mark">✓</span></h4>
+
+                            </div>
+                        </div>
+                        <button onclick="openQuizEmbed('sonkeigo', 2)" class="px-6 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold transition-all w-full md:w-auto">Mulai</button>
+                    </div>
+
+<div id="action-sonkeigo" class="hidden mt-8 flex-col items-center gap-4 animate-bounce-soft">
+                        <p class="text-red-400 font-bold text-lg">🎉 Level Selesai!</p>
+                        <div class="flex gap-4">
+                            <button onclick="goToSlide(16)" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg">Lihat Pembahasan</button>
+                            <button onclick="unlockNextLevel('kenjougo')" class="px-6 py-3 rounded-full bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg border border-white/20">Lanjut Level ➜</button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="goToSlide(5)" class="mt-auto mb-4 px-6 py-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all">Kembali ke Peta Level</button>
+            </main>
+             <div id="modal-sonkeigo" class="hidden absolute inset-0 z-50 bg-slate-900/95 flex flex-col">
+                <div class="p-4 flex justify-between items-center border-b border-white/10">
+                    <h3 class="text-white font-bold">Latihan Quiz</h3>
+                    <div class="flex gap-2">
+                        <button onclick="markQuizDone('sonkeigo')" class="px-4 py-1 bg-green-600 rounded text-white text-sm">Tandai Selesai </button>
+                        <button onclick="closeQuizModal('sonkeigo')" class="text-white hover:text-red-400">✕ Tutup</button>
+                    </div>
+                </div>
+                <div class="flex-1 p-2">
+                     <iframe id="frame-sonkeigo" class="w-full h-full rounded-lg bg-white" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="slide-14" class="slide">
+        <div class="w-full h-full flex flex-col">
+            <header class="w-full py-4 px-6 text-center bg-blue-900/90 border-b border-blue-500/30">
+                <h2 class="title-font text-2xl text-white">Quiz Level 3: <span class="jp-text">謙譲語</span></h2>
+            </header>
+            <main class="flex-1 px-4 py-6 content-section flex flex-col items-center">
+                <div class="max-w-4xl w-full space-y-6">
+                    <p class="text-center text-white/80 mb-6">Latihan terakhir! Selesaikan kedua latihan dibawah ini, untuk menamatkan semuanya.</p>
+                    
+                    <div id="card-kenjougo-1" class="p-6 rounded-2xl bg-slate-800/80 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl">📝</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Latihan 1: Dasar Kenjougo <span class="check-mark">✓</span></h4>
+
+                            </div>
+                        </div>
+                        <button onclick="openQuizEmbed('kenjougo', 1)" class="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-all w-full md:w-auto">Mulai</button>
+                    </div>
+
+                    <div id="card-kenjougo-2" class="p-6 rounded-2xl bg-slate-800/80 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl">🎮</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Latihan 2: Game Interaktif <span class="check-mark">✓</span></h4>
+
+                            </div>
+                        </div>
+                        <button onclick="openQuizEmbed('kenjougo', 2)" class="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-all w-full md:w-auto">Mulai</button>
+                    </div>
+
+<div id="action-kenjougo" class="hidden mt-8 flex-col items-center gap-4 animate-bounce-soft">
+                        <p class="text-blue-400 font-bold text-lg">🎉 Level Kenjougo Selesai!</p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <button onclick="goToSlide(17)" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg">Lihat Pembahasan</button>
+                            
+                            <button onclick="goToSlide(5)" class="px-6 py-3 rounded-full bg-slate-700 hover:bg-slate-800 text-white font-bold shadow-lg border border-white/20">Kembali ke Peta ➜</button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="goToSlide(5)" class="mt-auto mb-4 px-6 py-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all">Kembali ke Peta Level</button>
+            </main>
+             <div id="modal-kenjougo" class="hidden absolute inset-0 z-50 bg-slate-900/95 flex flex-col">
+                <div class="p-4 flex justify-between items-center border-b border-white/10">
+                    <h3 class="text-white font-bold">Latihan Quiz</h3>
+                    <div class="flex gap-2">
+                        <button onclick="markQuizDone('kenjougo')" class="px-4 py-1 bg-green-600 rounded text-white text-sm">Tandai Selesai </button>
+                        <button onclick="closeQuizModal('kenjougo')" class="text-white hover:text-red-400">✕ Tutup</button>
+                    </div>
+                </div>
+                <div class="flex-1 p-2">
+                     <iframe id="frame-kenjougo" class="w-full h-full rounded-lg bg-white" src=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="slide-15" class="slide">
+        <div class="w-full h-full flex flex-col relative z-20">
+            <header class="w-full py-3 px-6 flex justify-between items-center bg-gradient-to-r from-slate-900/90 to-emerald-900/90 border-b border-white/10 flex-none z-30 shadow-md">
+                <h3 class="text-white font-bold text-lg">Pembahasan Jawaban<span class="text-sm font-normal opacity-70 ml-2">丁寧語</span></h3>
+                <button onclick="goToSlide(5)" class="text-white hover:text-red-400 transition-colors">✕ Tutup / Kembali ke Peta</button>
+            </header>
+            
+            <main class="flex-1 p-2 bg-slate-100 overflow-hidden relative z-10">
+                <div class="w-full h-full rounded-xl overflow-hidden bg-white shadow-inner relative flex flex-col">
+                    <div class="w-full h-full overflow-y-auto p-4 md:p-8 text-slate-800 leading-relaxed scroll-smooth pb-20 space-y-8 animate-fadeIn">
+                        
+                        <div class="text-center mb-8">
+                            <h1 class="text-4xl font-bold text-emerald-700 mb-2 jp-text">解答と解説</h1>
+                            <p class="text-lg text-slate-500 font-medium">Jawaban & Pembahasan Latihan Teineigo</p>
+                        </div>
+
+                        <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-emerald-500 text-3xl">📝</span> Jawaban dan Pembahasan Latihan 1</h2>
+                            
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Pilihan Ganda</h3>
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">こちら</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">1. （初めて会った人に挨拶(あいさつ)する時）<br>「初めまして。私は田中と申(もう)します。（　　）もよろしくお願いいたします。」</p>
+                                    <p class="text-sm text-slate-600">Kata ganti penunjuk arah/tempat "こっち、ここ、これ" berubah menjadi "こちら" dalam teineigo.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">本日</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">2. （会社の会議室で）<br>「皆様、お集まりいただきありがとうございます。（　　）のスケジュールについてご説明いたします。」</p>
+                                    <p class="text-sm text-slate-600">Dalam konteks formal seperti rapat, "今日 (きょう)" harus diubah menjadi "本日 (ほんじつ)".</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">いかが</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">3. （レストランで客に）<br>「お客様、お飲み物は（　　）になさいますか。」</p>
+                                    <p class="text-sm text-slate-600">Untuk menanyakan keadaan atau menawarkan sesuatu ("どう"), bentuk teineigo-nya adalah "いかが".</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">後ほど</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">4. （電話で）<br>「山田は席を外しております。（　　）お電話いたします。」</p>
+                                    <p class="text-sm text-slate-600">Kata "後で" berubah menjadi "後(のち)ほど" dalam situasi bisnis/formal.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">あちら</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">5. （デパートの案内所で）<br>「お手洗いは、エスカレーターの（　　）にございます。」</p>
+                                    <p class="text-sm text-slate-600">Kata penunjuk "あっち、あそこ、あれ" menjadi "あちら" dalam teineigo.</p>
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Isian Rumpang</h3>
+                            <div class="space-y-4">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">まもなく</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">6. 電車のアナウンス：「（　　）、２番線(ばんせん)に電車が参ります。危険(きけん)ですから黄色(きいろ)い線の内側(うちがわ)までお下がりください。」（もうすぐ）</p>
+                                    <p class="text-sm text-slate-600">Pengumuman stasiun menggunakan bahasa formal. "もうすぐ" diubah menjadi "まもなく".</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">先日</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">7. 取引先へのメール：「（　　）は、お忙しいところお時間をいただき、誠にありがとうございました。」（この間）</p>
+                                    <p class="text-sm text-slate-600">Merujuk pada waktu yang telah berlalu (この間), bentuk sopannya atau teineigo adalah 先日.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">次第に / 徐々に</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">8. 天気予報：「明日の午後は（　　）雨が強くなるでしょう。」（だんだん）</p>
+                                    <p class="text-sm text-slate-600">"だんだん" dalam ragam bahasa formal/berita televisi berubah menjadi 次第に atau 徐々に.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">ほぼ</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">9. 会議の資料について：「この資料のデータは（　　）正しいです。」（だいたい）</p>
+                                    <p class="text-sm text-slate-600">"だいたい" berubah menjadi ほぼ dalam teineigo.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <p class="text-emerald-700 font-bold text-lg mb-1 jp-text">よろしい</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">10. 店員：「こちらのサイズで（　　）でしょうか。」（いい）</p>
+                                    <p class="text-sm text-slate-600">Bentuk teineigo dari "いい/ある" untuk menanyakan kelayakan adalah よろしい.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-emerald-500 text-3xl">🎮</span> Jawaban dan Pembahasan Latihan 2</h2>
+                            
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Mencocokkan</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm flex justify-between items-center">
+                                    <span class="text-slate-600 jp-text">去年 (きょねん)</span>
+                                    <span class="text-emerald-500 font-bold">→</span>
+                                    <span class="text-emerald-700 font-bold jp-text">昨年 (さくねん)</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm flex justify-between items-center">
+                                    <span class="text-slate-600 jp-text">今度 (こんど)</span>
+                                    <span class="text-emerald-500 font-bold">→</span>
+                                    <span class="text-emerald-700 font-bold jp-text">次回 / このたび</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm flex justify-between items-center">
+                                    <span class="text-slate-600 jp-text">もっと</span>
+                                    <span class="text-emerald-500 font-bold">→</span>
+                                    <span class="text-emerald-700 font-bold jp-text">さらに / いっそう</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm flex justify-between items-center">
+                                    <span class="text-slate-600 jp-text">どう</span>
+                                    <span class="text-emerald-500 font-bold">→</span>
+                                    <span class="text-emerald-700 font-bold jp-text">いかが</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm flex justify-between items-center">
+                                    <span class="text-slate-600 jp-text">すぐ</span>
+                                    <span class="text-emerald-500 font-bold">→</span>
+                                    <span class="text-emerald-700 font-bold jp-text">早速 / すぐに</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Menyusun Kata</h3>
+                            <div class="space-y-4">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">② ③ ① ④</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1 jp-text">こちらが受付でございます</p>
+                                    <p class="text-sm text-slate-600">Susunan yang tepat secara gramatikal adalah ② こちら ③ が受付 ① で ④ ございます (こちらが受付でございます). Mengacu pada aturan: Kata benda + で + ございます.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">④ ② ① ③</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1 jp-text">お客様、ご注文の品は以上でよろしい</p>
+                                    <p class="text-sm text-slate-600">Susunan yang tepat secara gramatikal adalah ④ お客様、② ご注文の品は ① 以上で ③ よろしい (お客様、ご注文の品は以上でよろしい). Menggabungkan よろしい dengan bentuk tanya でしょうか.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">② ① ③</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1 jp-text">まことに申し訳ございません</p>
+                                    <p class="text-sm text-slate-600">Susunan yang tepat secara gramatikal adalah ② まこと ① 申し訳 ③ ございません (まことに申し訳ございません). 誠(まこと)に merupakan kata lain dari 本当(ほんとう)に yang artinya benar-benar ingin meminta maaf.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">② ③ ① ④</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1 jp-text">お客様にもいかがでしょうか</p>
+                                    <p class="text-sm text-slate-600">Susunan yang tepat secara gramatikal adalah ② ③ ① ④ (お客様にもいかがでしょうか). Menawarkan barang kepada pelanggan dengan sopan.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">② ③ ①</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1 jp-text">あちらにございます</p>
+                                    <p class="text-sm text-slate-600">Susunan yang tepat secara gramatikal adalah ② あちら ③ に ① ございます (あちらにございます). Mengacu pada aturan: Kata benda + に + ございます. "あっちにあります" menjadi "あちらにございます".</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<div id="slide-16" class="slide">
+        <div class="w-full h-full flex flex-col relative z-20">
+            <header class="w-full py-3 px-6 flex justify-between items-center bg-gradient-to-r from-slate-900/90 to-red-900/90 border-b border-white/10 flex-none z-30 shadow-md">
+                <h3 class="text-white font-bold text-lg">Pembahasan Jawaban<span class="text-sm font-normal opacity-70 ml-2">尊敬語</span></h3>
+                <button onclick="goToSlide(5)" class="text-white hover:text-red-400 transition-colors">✕ Tutup / Kembali ke Peta</button>
+            </header>
+            
+            <main class="flex-1 p-2 bg-slate-100 overflow-hidden relative z-10">
+                <div class="w-full h-full rounded-xl overflow-hidden bg-white shadow-inner relative flex flex-col">
+                    <div class="w-full h-full overflow-y-auto p-4 md:p-8 text-slate-800 leading-relaxed scroll-smooth pb-20 space-y-8 animate-fadeIn">
+                        
+                        <div class="text-center mb-8">
+                            <h1 class="text-4xl font-bold text-red-700 mb-2 jp-text">解答と解説</h1>
+                            <p class="text-lg text-slate-500 font-medium">Jawaban & Pembahasan Latihan Sonkeigo</p>
+                        </div>
+
+                        <div class="material-card p-6 border-t-4 border-red-500 shadow-lg">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-red-500 text-3xl">📝</span> Jawaban dan Pembahasan Latihan 1</h2>
+                            
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Pilihan Ganda</h3>
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">B. お召しになって</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">1. 先生が＿＿＿いるスーツはとても素敵(すてき)ですね。</p>
+                                    <p class="text-sm text-slate-600">お召しになる adalah sonkeigo khusus untuk kata 着る (memakai baju). Opsi D (なさる) digunakan untuk kata する.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">C. くださいました</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">2. 田中先生がこの本を＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">くださる adalah sonkeigo dari くれる, yang berarti orang yang lebih tinggi posisinya memberikan sesuatu kepada pembicara.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">A. おっしゃった</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">3. さきほど、社長が＿＿＿通(とお)り、来月から新しいルールが始まります。</p>
+                                    <p class="text-sm text-slate-600">おっしゃる adalah sonkeigo dari 言う (berkata), sangat tepat untuk mengutip ucapan pimpinan. Opsi C dan D merupakan kenjougo.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">C. お休みになりました</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">4. お客様はもう＿＿＿か。</p>
+                                    <p class="text-sm text-slate-600">Untuk kata 寝る (tidur), eufemisme (penghalusan kata) yang menjadi bentuk hormat adalah お休みになる.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">A. 行かれます</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">5. 山田先生は明日、東京へ＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Ini adalah penerapan sonkeigo menggunakan bentuk pasif (れる/られる). Opsi B adalah bentuk kausatif (menyuruh pergi), dan opsi D adalah kenjougo.</p>
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Kalimat Rumpang</h3>
+                            <div class="space-y-4">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">いらっしゃいます</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">6. 受付で： 「社長はすぐ会議室に＿＿＿。」 (来る)</p>
+                                    <p class="text-sm text-slate-600">いらっしゃる berfungsi sebagai sonkeigo dari 来る yang tepat diucapkan terkait pimpinan. Resepsionis berbicara di dalam konteks internal perusahaan.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">下がり</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">7. 駅のアナウンス： 「白線(はくせん)の内側(うちがわ)までお＿＿＿ください。」 (下がる)</p>
+                                    <p class="text-sm text-slate-600">Menggunakan pola instruksi/permintaan sopan: お + bentuk Masu (tanpa masu) + ください. 下がります menjadi お下がりください.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">お使いになります</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">8. 先生、この傘を＿＿＿か。(使う)</p>
+                                    <p class="text-sm text-slate-600">Menerapkan pola reguler sonkeigo: お + bentuk Masu (tanpa masu) + になる. Opsi B adalah kenjougo.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">なさいます</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">9. お客様、コーヒーと紅茶(こうちゃ)、どちらに＿＿＿か。(する)</p>
+                                    <p class="text-sm text-slate-600">Bentuk sonkeigo dari kata kerja する adalah なさる, yang sangat umum digunakan dalam bahasa pelayanan.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">お取り</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">10. 店員： 「こちらのパンフレットはご自由に＿＿＿ください。」(取る)</p>
+                                    <p class="text-sm text-slate-600">Mengikuti rumus permintaan sopan (お + bentuk Masu (tanpa masu) + ください) untuk kata 取ります.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="material-card p-6 border-t-4 border-red-500 shadow-lg">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-red-500 text-3xl">🎮</span> Jawaban dan Pembahasan Latihan 2</h2>
+                            
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Pilihan Ganda</h3>
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">B. 召(め)し上がりました</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">1. 部長はもう昼ご飯を＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Kata 食べる memiliki bentuk sonkeigo khusus yaitu 召(め)し上がる yang paling tepat dan natural digunakan untuk atasan. Opsi A (bentuk pasif) memang bisa digunakan, namun bentuk khusus. Opsi (B) memiliki hierarki kesopanan yang lebih diutamakan. Opsi C adalah bentuk yang salah, dan D adalah kenjougo (merendahkan diri).</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">B. お見えになります</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">2. 先生、明日の会議には＿＿＿か。</p>
+                                    <p class="text-sm text-slate-600">お見えになる adalah bentuk sonkeigo khusus untuk 来る (datang). Opsi A adalah kenjougo, opsi C adalah bentuk pasif (kurang dibanding B), dan opsi D salah secara gramatikal (seharusnya お越(こ)しになる).</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">A. ご覧(らん)になって</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">3. こちらの資料を＿＿＿ください。</p>
+                                    <p class="text-sm text-slate-600">Kata 見る memiliki bentuk khusus ご覧になる. Jika digabungkan dengan permintaan sopan (～てください), bentuknya menjadi ご覧(らん)になってください. Opsi C (拝見(はいけん)する) adalah kenjougo, sangat fatal jika digunakan untuk menyuruh atasan.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">B. ご存知</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">4. 社長、A社の新しいプロジェクトについて＿＿＿ですか。</p>
+                                    <p class="text-sm text-slate-600">Untuk menanyakan apakah atasan mengetahui suatu informasi (知っている), bentuk baku yang digunakan adalah ご存知(ぞんじ)です. Opsi C adalah kenjougo untuk diri sendiri.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <p class="text-red-700 font-bold text-lg mb-1 jp-text">B. ご旅行</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">5. 正しい尊敬語の表現を選びなさい。</p>
+                                    <p class="text-sm text-slate-600">Kata 旅行 adalah kango (kata serapan Sino-Jepang), sehingga tepat disandingkan dengan awalan ご. Sebaliknya, 意見 dan 熱心 seharusnya menggunakan ご, sedangkan 名前 adalah wago (kata asli Jepang) sehingga menggunakan お.</p>
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Benar atau Salah</h3>
+                            <div class="space-y-4">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">B. 間違っている (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">6. 先生は今、新聞を拝見(はいけん)しています。</p>
+                                    <p class="text-sm text-slate-600">Salah secara pragmatik. 拝見(はいけん)する adalah kenjougo (merendahkan diri). Seharusnya menggunakan ご覧(らん)になっています jika subjeknya adalah guru.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">A. 正しい (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">7. 社長、ゴルフをされますか。</p>
+                                    <p class="text-sm text-slate-600">Benar. される merupakan bentuk pasif dari する yang secara tata bahasa sah difungsikan sebagai sonkeigo.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">B. 間違っている (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">8. 先生のお家族はどちらにいらっしゃいますか。</p>
+                                    <p class="text-sm text-slate-600">Salah pada penggunaan awalan hormat. Kata 家族 (kazoku) adalah serapan Sino-Jepang (kango), sehingga awalan yang tepat adalah ご menjadi ご家族.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">A. 正しい (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">9. 部長はもうお帰りになりました。</p>
+                                    <p class="text-sm text-slate-600">Benar. Kalimat ini mengaplikasikan pola baku お + bentuk Masu (tanpa masu) + になる dengan tepat untuk kata 帰ります.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">B. 間違っている (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">10. お客様が私にプレゼントを差(さ)し上げました。</p>
+                                    <p class="text-sm text-slate-600">Salah fatal. 差(さ)し上げる digunakan saat posisi kita lebih rendah memberi ke yang lebih tinggi. Jika pelanggan (posisi tinggi) memberi kita, seharusnya menggunakan くださる (くださいました).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<div id="slide-17" class="slide">
+        <div class="w-full h-full flex flex-col relative z-20">
+            <header class="w-full py-3 px-6 flex justify-between items-center bg-gradient-to-r from-slate-900/90 to-blue-900/90 border-b border-white/10 flex-none z-30 shadow-md">
+                <h3 class="text-white font-bold text-lg">Pembahasan Jawaban <span class="text-sm font-normal opacity-70 ml-2">謙譲語</span></h3>
+                <button onclick="goToSlide(5)" class="text-white hover:text-blue-400 transition-colors">✕ Tutup / Kembali ke Peta</button>
+            </header>
+            
+            <main class="flex-1 p-2 bg-slate-100 overflow-hidden relative z-10">
+                <div class="w-full h-full rounded-xl overflow-hidden bg-white shadow-inner relative flex flex-col">
+                    <div class="w-full h-full overflow-y-auto p-4 md:p-8 text-slate-800 leading-relaxed scroll-smooth pb-20 space-y-8 animate-fadeIn">
+                        
+                        <div class="text-center mb-8">
+                            <h1 class="text-4xl font-bold text-blue-700 mb-2 jp-text">解答と解説</h1>
+                            <p class="text-lg text-slate-500 font-medium">Jawaban & Pembahasan Latihan Kenjougo</p>
+                        </div>
+
+                        <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-blue-500 text-3xl">📝</span> Jawaban dan Pembahasan Latihan 1</h2>
+                            
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Pilihan Ganda</h3>
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">お持ちします</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">1. [画像：重いかばんを持っている先生]<br>学生：先生、かばんが重そうですね。私が＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Menggunakan pola お + ます形 + します untuk menawarkan bantuan dengan merendahkan diri sendiri.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">拝見しました</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">2. 面接で：<br>面接官：弊社(へいしゃ)のウェブサイトはもう見ましたか。<br>学生：はい、昨日＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">"Melihat" (見る) website milik perusahaan klien. Kata kerja merendahkan diri yang tepat adalah 拝見(はいけん)する.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">おります</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">3. 取引先（クライアント）との電話で：<br>客：田中部長はいらっしゃいますか。<br>社員：申し訳ありません。田中はただいま席を外して＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Saat berbicara dengan pihak luar (klien), rekan satu perusahaan (Tanaka) dihitung sebagai "kelompok dalam" (Uchi), sehingga tindakannya harus direndahkan dengan いる -> おる (おります).</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">読ませていただきました</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">4. 大学の廊下で：<br>社員：教授：あ、田中さん。この間渡した私の新しい本、もう読みましたか。<br>学生：はい、とても勉強になりました。昨日、最後まで＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Karena mahasiswa membicarakan tindakannya sendiri di hadapan orang yang dihormati, ia wajib merendahkan diri. Pola penggabungan Kata Kerja Kausatif (使役形 / -sasete) dengan いただく (-itadaku) secara gramatikal bermakna "saya menerima kehormatan/kebaikan hati karena telah diizinkan membaca".</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">ご紹介します</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">5. 会社の説明会で：<br>社員：本日はお忙しい中、お集まりいただきありがとうございます。これから、当社の新製品について＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Tindakan mengenalkan (紹介する) dilakukan oleh pembicara. Polanya adalah ご + Kata Benda + します.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">いたします</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">6. 駅で知らない人に道を教える時：<br>旅行者：すみません、市役所(しやくしょ)へ行きたいんですが。<br>あなた：あ、市役所(しやくしょ)ですね。私もそちらの方向(ほうこう)へ行きますので、ご案内＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Tindakan memandu (案内する) dilakukan oleh pembicara. Merupakan bentuk ご + Kata Benda + いたします.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">伺っても</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">7. 先生の研究室で：<br>学生：先生、この文法の使い方がよくわからないんですが、少し＿＿＿よろしいでしょうか。</p>
+                                    <p class="text-sm text-slate-600">Mahasiswa ingin "bertanya" kepada profesor. 問う/聞く (bertanya/mendengar) bentuk kenjougo-nya adalah 伺う (ukagau).</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">伺っております</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">8. パーティーで、取引先の社長に：<br>社長：私の妻です。<br>社員：初めまして。奥様のことは、社長からよく＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">"Saya sering mendengar tentang nyonya dari direktur." 聞く -> 伺(うかが)う. (A: 存(ぞん)じております berarti mengetahui, kurang tepat untuk konteks "mendengar cerita").</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">コピーいたします</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">9. 会議室で：<br>A：この資料、コピーしましょうか。<br>B：あ、大丈夫です。私が後で＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Kata serapan (Katakana) tidak bisa ditambahkan awalan お/ご. Oleh karena itu, cukup menggunakan します -> いたします.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <p class="text-blue-700 font-bold text-lg mb-1 jp-text">お呼びします</p>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">10. [音声アイコン：電話のベルの音]<br>客：もしもし、営業部(えいぎょうぶ)の山田さんをお願いします。<br>社員：山田ですね。少々お待ちください。すぐに＿＿＿。</p>
+                                    <p class="text-sm text-slate-600">Menawarkan diri memanggilkan rekan kerja (Uchi) untuk klien. Menggunakan pola お + ます形 + します.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-blue-500 text-3xl">🎮</span> Jawaban dan Pembahasan Latihan 2</h2>
+                            
+                            <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2">Benar atau Salah</h3>
+                            <div class="space-y-4">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">〇 (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">1. （図書館で学生が先生に）<br>学生：「先生、先週お借りした資料、とても役に立ちました。もう一度（ 拝見(はいけん)して ）もよろしいでしょうか。」</p>
+                                    <p class="text-sm text-slate-600">Konteks kalimat ini adalah mahasiswa yang ingin "melihat/membaca" kembali materi milik dosen (orang yang dihormati). Sesuai dengan materi, kata kerja 見る (melihat) diubah menjadi 拝見(はいけん)します. Penggunaan 拝見(はいけん)してもよろしいでしょうか sangat tepat dan natural untuk meminta izin merendahkan diri atas barang milik atasan.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">〇 (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">2. （会社の受付で）<br>受付：「午後2時にお約束の鈴木様(すずきさま)ですね。すぐに担当(たんとう)の者(もの)が（ 参(まい)ります ）ので、少々お待ちください。」</p>
+                                    <p class="text-sm text-slate-600">Resepsionis sedang berbicara kepada tamu (pihak luar/ Soto). Oleh karena itu, staf perusahaan sendiri (pihak dalam/ Uchi) yang akan "datang" (来る) menemui tamu tersebut harus direndahkan derajatnya. Berdasarkan referensi, 来る berubah menjadi 参(まい)ります.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">✖ (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">3. （電話で自分の名前を言う時）<br>社員：「もしもし、私、株式(かぶし)会社Aの田中と（ おっしゃいます ）が、林(はやし)部長はいらっしゃいますか。」</p>
+                                    <p class="text-sm text-slate-600">Saat memperkenalkan diri sendiri di telepon, kita harus menggunakan Kenjougo. Kata 言う untuk diri sendiri seharusnya adalah 申(もう)します. Kata おっしゃいます adalah Sonkeigo (bahasa hormat untuk meninggikan orang lain) dan pantang digunakan untuk diri sendiri.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">〇 (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">4. （学生が先生に質問する時）<br>学生：「先生、今日の授業で分からないところがあるんですが、少し（ 伺(うかが)って ）もよろしいでしょうか。」</p>
+                                    <p class="text-sm text-slate-600">Mahasiswa ingin "bertanya" (問う / 聞く) kepada dosen. Sesuai dengan aturan perubahan pada materi, Kenjougo yang tepat adalah 伺います. Menggunakan bentuk te-form 伺って yang digabung dengan permohonan izin (もよろしいでしょうか) menunjukkan tingkat kesopanan yang sangat baik dan terstruktur.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">✖ (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">5. （部下が上司の荷物を持つ時）<br>社員：「部長、そのお荷物、重そうですね。私が（ お持ちになります ）。」</p>
+                                    <p class="text-sm text-slate-600">Pegawai menawarkan bantuan untuk "membawakan" (持つ) barang milik manajer. Mengacu pada kaidah tata bahasa di materi, pembentukan Kenjougo untuk menawarkan aksi adalah お+ます形+します. Jadi, seharusnya adalah お持ちします. Kata お持ちになります adalah pola Sonkeigo (お+ます形+になります), yang berarti malah menyuruh manajer membawa barangnya sendiri.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">✖ (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">6. （学生が先生に）<br>学生 :「先生、明日私の家でパーティーをするんですが、先生も（ 参(まい)りませんか ）。」</p>
+                                    <p class="text-sm text-slate-600">参(まい)ります adalah Kenjougo (merendahkan diri). Tidak boleh digunakan untuk mengundang guru (orang yang dihormati). Seharusnya memakai Sonkeigo seperti いらっしゃいませんか.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">〇 (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">7. （店員が客に）<br>店員 :「お客様、こちらの書類にサインを（ 頂戴(ちょうだい)いたしても ）よろしいでしょうか。」</p>
+                                    <p class="text-sm text-slate-600">頂戴(ちょうだい)いたします adalah Kenjougo dari もらう (menerima). Meminta tanda tangan klien menggunakan bentuk ini sangat tepat.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">〇 (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">8. （社員が取引先に自分の会社の社長について話す時）<br>社員 :「はい、その件(けん)につきましては、弊社(へいしゃ)の社長も（ 存(ぞん)じております ）。」</p>
+                                    <p class="text-sm text-slate-600">Sesuai konsep Uchi-Soto, direktur sendiri (Uchi) ketika dibicarakan di depan klien (Soto) harus diturunkan derajatnya menggunakan Kenjougo (存(ぞん)じる).</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">〇 (Benar)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">9. （学生が先生に自分の予定を話す時）<br>学生 :「来週の月曜日は、アルバイトの面接に（ 伺(うかが)う ）予定です。」</p>
+                                    <p class="text-sm text-slate-600">伺(うかが)う adalah Kenjougo dari 行く. Mahasiswa "pergi" ke tempat wawancara (pihak yang dihormati), sehingga ini tepat.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">✖ (Salah)</span>
+                                    </div>
+                                    <p class="text-sm text-slate-800 font-medium mb-1">10. （社員が客の家でお茶を出された時）<br>社員 : 「ありがとうございます。それでは、遠慮(えんりょ)なく（ 拝見(はいけん)します ）。」</p>
+                                    <p class="text-sm text-slate-600">拝見(はいけん)します adalah Kenjougo untuk "melihat". Untuk "minum/makan" (teh), seharusnya menggunakan いただきますまたは頂戴(ちょうだい)いたします.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="slide-7" class="slide">
+        <div class="w-full h-full flex flex-col">
+            <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+                <h2 class="title-font text-3xl text-white mt-1 tracking-wider text-strong-shadow">MATERI: <span class="highlight-gold jp-text text-4xl">丁寧語</span> (TEINEIGO)</h2>
+            </header>
+            <main class="flex-1 flex flex-col items-center justify-center px-4">
+                <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <button onclick="openContent('teineigo', 'reading')" class="card-hover p-8 rounded-2xl bg-gradient-to-b from-emerald-600 to-emerald-800 border-2 border-emerald-400 text-white flex flex-col items-center gap-4 shadow-xl">
+                        <span class="text-6xl">📖</span>
+                        <h3 class="text-2xl font-bold">Materi Bacaan</h3>
+                        <p class="text-sm opacity-80 text-center">Penjelasan materi tentang Teineigo.</p>
+                    </button>
+                    <button onclick="openContent('teineigo', 'video')" class="card-hover p-8 rounded-2xl bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-400 text-white flex flex-col items-center gap-4 shadow-xl">
+                        <span class="text-6xl">▶️</span>
+                        <h3 class="text-2xl font-bold">Video Belajar</h3>
+                        <p class="text-sm opacity-80 text-center">Penjelasan video tentang Teineigo.</p>
+                    </button>
+                </div>
+                <button onclick="goToSlide(4)" class="mt-12 px-8 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all">
+                    <span>←</span> <span class="jp-text">戻ります</span> 
+                </button>
+            </main>
+        </div>
+    </div>
+
+    <div id="slide-8" class="slide">
+        <div class="w-full h-full flex flex-col">
+            <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+                <h2 class="title-font text-3xl text-white mt-1 tracking-wider text-strong-shadow">MATERI: <span class="highlight-red jp-text text-4xl">尊敬語</span> (SONKEIGO)</h2>
+            </header>
+            <main class="flex-1 flex flex-col items-center justify-center px-4">
+                <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <button onclick="openContent('sonkeigo', 'reading')" class="card-hover p-8 rounded-2xl bg-gradient-to-b from-red-600 to-red-900 border-2 border-red-400 text-white flex flex-col items-center gap-4 shadow-xl">
+                        <span class="text-6xl">📖</span>
+                        <h3 class="text-2xl font-bold">Materi Bacaan</h3>
+                        <p class="text-sm opacity-80 text-center">Penjelasan materi tentang Sonkeigo.</p>
+                    </button>
+                    <button onclick="openContent('sonkeigo', 'video')" class="card-hover p-8 rounded-2xl bg-gradient-to-b from-orange-600 to-orange-800 border-2 border-orange-400 text-white flex flex-col items-center gap-4 shadow-xl">
+                        <span class="text-6xl">▶️</span>
+                        <h3 class="text-2xl font-bold">Video Belajar</h3>
+                        <p class="text-sm opacity-80 text-center">Penjelasan video tentang Sonkeigo.</p>
+                    </button>
+                </div>
+                <button onclick="goToSlide(4)" class="mt-12 px-8 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all">
+                    <span>←</span> <span class="jp-text">戻ります</span> 
+                </button>
+            </main>
+        </div>
+    </div>
+
+    <div id="slide-9" class="slide">
+        <div class="w-full h-full flex flex-col">
+            <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+                <h2 class="title-font text-3xl text-white mt-1 tracking-wider text-strong-shadow">MATERI: <span class="highlight-gold jp-text text-4xl">謙譲語</span> (KENJOUGO)</h2>
+            </header>
+            <main class="flex-1 flex flex-col items-center justify-center px-4">
+                <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <button onclick="openContent('kenjougo', 'reading')" class="card-hover p-8 rounded-2xl bg-gradient-to-b from-blue-600 to-blue-900 border-2 border-blue-400 text-white flex flex-col items-center gap-4 shadow-xl">
+                        <span class="text-6xl">📖</span>
+                        <h3 class="text-2xl font-bold">Materi Bacaan</h3>
+                        <p class="text-sm opacity-80 text-center">Penjelasan materi tentang Kenjougo.</p>
+                    </button>
+                    <button onclick="openContent('kenjougo', 'video')" class="card-hover p-8 rounded-2xl bg-gradient-to-b from-indigo-600 to-indigo-800 border-2 border-indigo-400 text-white flex flex-col items-center gap-4 shadow-xl">
+                        <span class="text-6xl">▶️</span>
+                        <h3 class="text-2xl font-bold">Video Belajar</h3>
+                        <p class="text-sm opacity-80 text-center">Penjelasan video tentang Kenjougo.</p>
+                    </button>
+                </div>
+                <button onclick="goToSlide(4)" class="mt-12 px-8 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all">
+                    <span>←</span> <span class="jp-text">戻ります</span> 
+                </button>
+            </main>
+        </div>
+    </div>
+
+    <div id="slide-10" class="slide">
+        <div class="w-full h-full flex flex-col relative z-20">
+            <header class="w-full py-3 px-6 flex justify-between items-center bg-gradient-to-r from-slate-900/90 to-blue-900/90 border-b border-white/10 flex-none z-30 shadow-md">
+                <h3 class="text-white font-bold text-lg"><span class="reading-title">Materi Bacaan</span> <span class="text-sm font-normal opacity-70 ml-2">Web View</span></h3>
+                <button onclick="goBackFromContent()" class="text-white hover:text-red-400 transition-colors">✕ Tutup</button>
+            </header>
+            
+            <main class="flex-1 p-2 bg-slate-100 overflow-hidden relative z-10">
+                <div id="reading-content-container" class="w-full h-full rounded-xl overflow-hidden bg-white shadow-inner relative flex flex-col">
+                    <div id="reading-scroll-area" class="w-full h-full overflow-y-auto p-4 md:p-8 text-slate-800 leading-relaxed scroll-smooth pb-20">
+                        </div>
+                </div>
+            </main>
+
+            <footer class="p-4 bg-slate-900/90 border-t border-white/10 flex justify-between items-center flex-none z-30 relative shadow-[0_-5px_15px_rgba(0,0,0,0.3)]">
+                <button onclick="goBackFromContent()" class="px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"><span>←</span> <span class="jp-text">戻ります</span> </button>
+                <div class="flex gap-3">
+                    <button onclick="switchContentMode('video')" class="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-semibold shadow-lg transition-transform hover:scale-105">
+                        Tonton Video
+                    </button>
+                    <button onclick="nextMaterial()" class="px-5 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-semibold shadow-lg transition-transform hover:scale-105">
+                        Lanjut Materi ➜
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <div id="slide-11" class="slide">
+    <div class="w-full h-full flex flex-col">
+        <header class="w-full py-3 px-6 flex justify-between items-center bg-gradient-to-r from-slate-900/90 to-red-900/90 border-b border-white/10">
+            <h3 class="text-white font-bold text-lg"><span class="video-title">Video Pembelajaran</span> <span class="text-sm font-normal opacity-70 ml-2">YouTube</span></h3>
+            <button onclick="goBackFromContent()" class="text-white hover:text-red-400 transition-colors">✕ Tutup</button>
+        </header>
+        <main class="flex-1 p-4 bg-black flex flex-col items-center justify-center overflow-hidden gap-3">
+            <div class="w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10 relative z-10">
+                <iframe id="video-frame" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <div class="text-center animate-fade-in-up bg-white/5 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm">
+                <p class="text-white/60 text-xs md:text-sm font-light tracking-wide">
+                    Courtesy of: 
+                    <a id="video-source-link" href="#" target="_blank" class="text-red-400 hover:text-red-300 hover:underline font-bold ml-1 transition-colors">
+                        Loading Source...
+                    </a>
+                </p>
+            </div>
+        </main>
+        <footer class="p-4 bg-slate-900/90 border-t border-white/10 flex justify-between items-center">
+            <button onclick="goBackFromContent()" class="px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20"><span>←</span> <span class="jp-text">戻ります</span> </button>
+            <div class="flex gap-3">
+                <button onclick="switchContentMode('reading')" class="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-semibold shadow-lg">Baca Materi</button>
+                <button onclick="nextMaterial()" class="px-5 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-semibold shadow-lg">Lanjut Materi ➜</button>
+            </div>
+        </footer>
+    </div>
+</div>
+
+    <div id="slide-6" class="slide">
+    <div class="w-full h-full flex flex-col">
+        <header class="w-full py-4 px-6 text-center bg-gradient-to-r from-slate-900/80 via-blue-900/80 to-slate-900/80 border-b border-white/10">
+            <p class="text-lg md:text-xl text-white font-semibold">Belajar <span class="jp-text highlight-red text-2xl">敬語</span> Menjadi <span class="jp-text highlight-gold text-2xl">楽しい</span></p>
+            <h2 class="title-font text-3xl md:text-4xl text-white mt-2 tracking-wide text-strong-shadow">DEKIGO</h2>
+        </header>
+        <main class="flex-1 px-4 py-6 content-section overflow-y-auto">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-2xl md:text-3xl text-white font-bold mb-6 text-center">ℹ️ <span class="jp-text">について</span> - Tentang DEKIGO</h3>
+                <div class="space-y-6">
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-500/20 backdrop-blur-md border border-cyan-200/30 shadow-lg shadow-cyan-500/10 hover:bg-cyan-400/30 transition-all duration-300">
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="w-32 h-32 flex-shrink-0 rounded-2xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/20 shadow-inner">
+                                <img src="https://soco-st.com/wp-content/uploads/gs_15976_color.png?modified=1726398928" alt="Apa itu DEKIGO" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 text-center md:text-left">
+                                <h4 class="text-xl font-bold text-white mb-2 drop-shadow-sm">Apa itu DEKIGO?</h4>
+                                <p class="text-cyan-50 leading-relaxed font-light"><span class="title-font text-xl tracking-wide font-bold"><span class="text-red-400 drop-shadow-sm">DEKI</span><span class="text-yellow-400 drop-shadow-sm">GO</span></span> adalah singkatan dari <span class="subtitle-font text-lg font-bold"><span class="text-red-400">DEKI</span><span class="text-white">RU</span> <span class="text-white">KEI</span><span class="text-yellow-400">GO</span></span> (できる敬語) yang berarti "Bisa Ragam Hormat dan Sopan Bahasa Jepang". Media pembelajaran ini dirancang untuk membantu mahasiswa mempelajari ragam sopan dan hormat dalam bahasa Jepang 敬語 (keigo) dengan cara yang interaktif dan menyenangkan.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-fuchsia-400/20 to-purple-500/20 backdrop-blur-md border border-fuchsia-200/30 shadow-lg shadow-fuchsia-500/10 hover:bg-fuchsia-400/30 transition-all duration-300">
+                        <h4 class="text-xl font-bold text-white mb-4 flex items-center justify-center md:justify-start gap-2 border-b border-white/10 pb-2 inline-block md:block"><span class="text-2xl drop-shadow-md">👤</span> Pembuat</h4>
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="w-24 h-24 flex-shrink-0 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 p-1 shadow-lg">
+                                <img src="https://assets-a1.kompasiana.com/images/avatar/pas-foto-6990777334777c29d8510472.jpg?t=t&v=180" alt="Foto Pembuat" class="w-full h-full object-cover rounded-full border border-white/20">
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h5 class="text-lg font-bold text-white tracking-wide">Muhammad Rizal Nugraha</h5>
+                                <p class="text-fuchsia-200 jp-text font-medium text-sm mt-1 mb-2">ムハンマド・リザル・ヌグラハ</p>
+                                <div class="w-16 h-0.5 bg-fuchsia-400/50 mx-auto md:mx-0 mb-2 rounded-full"></div>
+                                <p class="text-fuchsia-50 text-sm font-light">Mahasiswa Pendidikan Bahasa Jepang</p>
+                                <p class="text-white font-semibold mt-1">Universitas Brawijaya</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-blue-400/20 to-indigo-500/20 backdrop-blur-md border border-blue-200/30 shadow-lg shadow-blue-500/10 hover:bg-blue-400/30 transition-all duration-300">
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="w-24 h-24 flex-shrink-0 p-3 bg-white/10 rounded-full border border-white/20 shadow-inner flex items-center justify-center">
+                                <img src="https://i.ibb.co.com/d0bd0PNm/Logo-Universitas-Brawijaya-svg.png" alt="Logo UB" class="w-full h-full object-contain drop-shadow-md" border="0">
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h5 class="text-lg font-bold text-white tracking-wide">Universitas Brawijaya</h5>
+                                <p class="text-blue-50 mt-1 font-light text-sm">Malang, Jawa Timur, Indonesia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-4 mt-8">
+                    <button onclick="goToSlide(2)" class="px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all flex items-center gap-2"> <span>←</span> <span class="jp-text">戻ります</span> </button> 
+                    <button onclick="goToSlide(1)" class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2"> <span>🏠</span> <span>Home</span> </button>
+                </div>
+            </div>
+        </main>
+        <footer class="w-full py-3 px-4 text-center bg-gradient-to-r from-slate-900/90 via-blue-900/90 to-slate-900/90 border-t border-white/10">
+            <p class="text-white/60 text-xs md:text-sm">Created by <span class="text-white font-semibold">Muhammad Rizal Nugraha</span> - Mahasiswa Pendidikan Bahasa Jepang Universitas Brawijaya</p>
+        </footer>
+       </div>
+    </div>
+   </div>
+  </div>
+
+  <script>
+    // Configuration
+    const defaultConfig = {
+      main_slogan: "Belajar 敬語 Menjadi 楽しい",
+      creator_name: "Muhammad Rizal Nugraha",
+      primary_color: "#003366",
+      accent_color: "#ff4757",
+      gold_color: "#ffd93d"
+    };
+    
+    let config = { ...defaultConfig };
+    let currentSlide = 1;
+
+    // --- STATE MANAGEMENT ---
+    let currentMaterial = ''; // 'teineigo', 'sonkeigo', 'kenjougo'
+    let currentQuizLevel = ''; // 'teineigo', 'sonkeigo', 'kenjougo'
+    let currentQuizPart = 0; // 1 or 2
+
+    // Status penyelesaian Quiz
+    let quizState = {
+        teineigo: { p1: false, p2: false, unlocked: true },
+        sonkeigo: { p1: false, p2: false, unlocked: false },
+        kenjougo: { p1: false, p2: false, unlocked: false }
+    };
+    
+    // --- DATABASE VIDEO & SUMBER (Edit Bagian Ini) ---
+    const videoDatabase = {
+        teineigo: {
+            url: "https://www.youtube.com/embed/AA-qnnjG3n4?si=-JM9cwIaINysLlEl", 
+            channelName: "etraining kemnaker", 
+            channelLink: "https://www.youtube.com/@etrainingkemnaker1127"
+        },
+        sonkeigo: {
+            url: "https://www.youtube.com/embed/E79GmcwL22Q",
+            channelName: "Muzukashii Nihongo", 
+            channelLink: "https://www.youtube.com/@nassusensei"
+        },
+        kenjougo: {
+            url: "https://www.youtube.com/embed/GYJw7BKy85E",
+            channelName: "Muzukashii Nihongo", 
+            channelLink: "https://www.youtube.com/@nassusensei"
+        }
+    };
+
+    // --- MATERIAL CONTENT (HTML STRINGS) ---
+    const studyMaterials = {
+teineigo: `
+            <div class="space-y-8 animate-fadeIn">
+                <div class="text-center mb-6">
+                    <h1 class="text-4xl font-bold text-emerald-700 mb-2 jp-text">丁寧語</h1>
+                    <p class="text-lg text-slate-500 font-medium">(Teineigo)</p>
+                    <span class="inline-block px-4 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm mt-2 font-bold shadow-sm">Bahasa Sopan Dasar</span>
+                </div>
+
+                <div class="w-full max-w-2xl mx-auto">
+                    <div class="rounded-2xl overflow-hidden shadow-md border-4 border-emerald-50">
+                        <img src="https://i.ibb.co.com/5X9hkNXy/1.png" alt="Ilustrasi Materi Teineigo" class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <p class="text-center text-emerald-600/70 text-xs mt-2 font-medium tracking-wide">
+                        Courtesy of: <a href="https://wkwkjapan.com/tata-bahasa/bahasa-halus-i-ii/" target="_blank" class="hover:underline hover:text-emerald-800 transition-colors">WkWkJapan</a>
+                    </p>
+                </div>
+
+                <div class="max-w-5xl mx-auto space-y-8">
+                    
+                    <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2"><span class="text-emerald-500 text-3xl">📌</span> Konsep Dasar</h2>
+                        <p class="mb-6 text-slate-700 leading-relaxed text-justify">
+                            <strong>丁寧語 (ていねいご)</strong> adalah bahasa hormat atau sopan yang paling dasar dan umum digunakan di Jepang. Bahasa ini digunakan untuk berbicara kepada lawan bicara tanpa meninggikan lawan bicara ataupun merendahkan diri sendiri.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100 h-full flex flex-col justify-center">
+                                <p class="text-sm text-blue-800 font-bold mb-4 flex items-center gap-2 border-b border-blue-200 pb-2">
+                                    <span>👥</span> Kapan Teineigo digunakan?
+                                </p>
+                                <ul class="list-disc pl-5 space-y-2 text-sm text-blue-900 font-medium">
+                                    <li>Berbicara dengan <strong>orang yang lebih tua</strong>.</li>
+                                    <li>Berbicara dengan orang yang <strong>baru pertama kali kenal</strong> atau bertemu.</li>
+                                    <li>Berbicara dengan orang yang <strong>tidak akrab</strong> atau tidak begitu dekat.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-emerald-50 p-6 rounded-xl border border-emerald-100 h-full flex flex-col justify-center items-center text-center shadow-sm">
+                                <p class="text-emerald-800 font-bold mb-4 text-sm uppercase tracking-wider border-b border-emerald-200 pb-2 w-full">
+                                    💡 Ciri Khas
+                                </p>
+                                <p class="text-slate-700 text-sm mb-3">
+                                    Dalam teineigo, bentuk sopan ditunjukkan pada <strong>akhir kalimat</strong> dengan penggunaan:
+                                </p>
+                                <div class="flex items-center justify-center gap-4 w-full">
+                                    <div class="bg-white px-6 py-3 rounded-lg border border-emerald-200 shadow-sm">
+                                        <strong class="jp-text text-emerald-700 text-xl block">です</strong>
+                                        <span class="text-xs text-slate-400">(Desu)</span>
+                                    </div>
+                                    <span class="text-slate-400 font-medium">atau</span>
+                                    <div class="bg-white px-6 py-3 rounded-lg border border-emerald-200 shadow-sm">
+                                        <strong class="jp-text text-emerald-700 text-xl block">ます</strong>
+                                        <span class="text-xs text-slate-400">(Masu)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-emerald-500 text-3xl">⚙️</span> 文法 (Tata Bahasa)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 1</span>
+                                <p class="text-xl font-black jp-text text-slate-800 mb-1">ます形 + ます</p>
+                                <p class="text-sm text-slate-600 font-medium">Kata kerja bentuk masu + masu</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 2</span>
+                                <p class="text-xl font-black jp-text text-slate-800 mb-1">名詞 / 形容詞 + です</p>
+                                <p class="text-sm text-slate-600 font-medium">Kata benda / Kata sifat + desu</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 3</span>
+                                <p class="text-xl font-black jp-text text-slate-800 mb-1">名詞 に + ございます</p>
+                                <p class="text-sm text-slate-600 font-medium">Kata benda + Ni + Gozaimasu</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 4</span>
+                                <p class="text-xl font-black jp-text text-slate-800 mb-1">名詞 で + ございます</p>
+                                <p class="text-sm text-slate-600 font-medium">Kata benda + De + Gozaimasu</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-emerald-500 text-3xl">📖</span> 言葉 (Kosakata)</h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                            <div class="space-y-8">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2 text-center">Arah / Letak</h3>
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead>
+                                            <tr><th class="w-1/2 text-center">普通体 (Biasa)</th><th class="w-1/2 text-emerald-800 text-center">丁寧体 (Sopan)</th></tr>
+                                        </thead>
+                                        <tbody class="text-base jp-text">
+                                            <tr><td class="text-center">どこ、どっち</td><td class="font-bold text-emerald-700 text-center">どちら</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">あっち、あそこ、あれ</td><td class="font-bold text-emerald-700 text-center">あちら</td></tr>
+                                            <tr><td class="text-center">こっち、ここ、これ</td><td class="font-bold text-emerald-700 text-center">こちら</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">そっち、そこ、それ</td><td class="font-bold text-emerald-700 text-center">そちら</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2 text-center">Waktu (Hari)</h3>
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead>
+                                            <tr><th class="w-1/2 text-center">普通体 (Biasa)</th><th class="w-1/2 text-emerald-800 text-center">丁寧体 (Sopan)</th></tr>
+                                        </thead>
+                                        <tbody class="text-sm jp-text">
+                                            <tr><td class="text-center">この間 (あいだ)</td><td class="font-bold text-emerald-700 text-center">先日 (せんじつ)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">今日 (きょう)</td><td class="font-bold text-emerald-700 text-center">本日 (ほんじつ)</td></tr>
+                                            <tr><td class="text-center">昨日 (きのう)</td><td class="font-bold text-emerald-700 text-center">昨日 (さくじつ)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">一昨日 (おととい)</td><td class="font-bold text-emerald-700 text-center">一昨日 (いっさくじつ)</td></tr>
+                                            <tr><td class="text-center">明日 (あした)</td><td class="font-bold text-emerald-700 text-center">明日 (みょうにち)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">明後日 (あさって)</td><td class="font-bold text-emerald-700 text-center">明後日 (みょうごにち)</td></tr>
+                                            <tr><td class="text-center">明日以降 (あしたいこう)</td><td class="font-bold text-emerald-700 text-center">後日 (ごじつ)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">その日</td><td class="font-bold text-emerald-700 text-center">当日 (とうじつ)</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2 text-center">Waktu (Tahun)</h3>
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead>
+                                            <tr><th class="w-1/2 text-center">普通体 (Biasa)</th><th class="w-1/2 text-emerald-800 text-center">丁寧体 (Sopan)</th></tr>
+                                        </thead>
+                                        <tbody class="text-sm jp-text">
+                                            <tr><td class="text-center">今年 (ことし)</td><td class="font-bold text-emerald-700 text-center">本年 (ほんねん)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">去年 (きょねん)</td><td class="font-bold text-emerald-700 text-center">昨年 (さくねん)</td></tr>
+                                            <tr><td class="text-center">一昨年 (おととし)</td><td class="font-bold text-emerald-700 text-center">一昨年 (いっさくねん)</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="h-full">
+                                <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-slate-100 pb-2 text-center">Ungkapan Lainnya</h3>
+                                <div class="border rounded-lg overflow-hidden">
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead>
+                                            <tr><th class="w-1/2 text-center">日常 (Biasa)</th><th class="w-1/2 text-emerald-800 text-center">改まった (Sopan)</th></tr>
+                                        </thead>
+                                        <tbody class="text-sm jp-text">
+                                            <tr><td class="text-center">さっき</td><td class="font-bold text-emerald-700 text-center">先(さき)ほど</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">前に</td><td class="font-bold text-emerald-700 text-center">以前(いぜん)</td></tr>
+                                            <tr><td class="text-center">今</td><td class="font-bold text-emerald-700 text-center">只今(ただいま)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">後で</td><td class="font-bold text-emerald-700 text-center">後(のち)ほど</td></tr>
+                                            <tr><td class="text-center">すぐ</td><td class="font-bold text-emerald-700 text-center">すぐに、早速 (さっそく)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">もうすぐ</td><td class="font-bold text-emerald-700 text-center">まもなく</td></tr>
+                                            <tr><td class="text-center">今度、これから</td><td class="font-bold text-emerald-700 text-center">このたび、次回 (じかい)</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">ちょっと</td><td class="font-bold text-emerald-700 text-center">少々(しょうしょう)</td></tr>
+                                            <tr><td class="text-center">〜くらい</td><td class="font-bold text-emerald-700 text-center">〜ほど</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">だいたい</td><td class="font-bold text-emerald-700 text-center">ほぼ</td></tr>
+                                            <tr><td class="text-center">だんだん</td><td class="font-bold text-emerald-700 text-center">次第 (しだい) に、徐々 (じょじょ) に</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">いつも</td><td class="font-bold text-emerald-700 text-center">常 (つね) に</td></tr>
+                                            <tr><td class="text-center">やっぱり</td><td class="font-bold text-emerald-700 text-center">やはり</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">もっと</td><td class="font-bold text-emerald-700 text-center">さらに、いっそう</td></tr>
+                                            <tr><td class="text-center">いまいち</td><td class="font-bold text-emerald-700 text-center">あまり</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">誰(だれ)</td><td class="font-bold text-emerald-700 text-center">どなた、どちら様 (さま) </td></tr>
+                                            <tr><td class="text-center">どう</td><td class="font-bold text-emerald-700 text-center">いかが</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">ある</td><td class="font-bold text-emerald-700 text-center">よろしい、結構 (けっこう)</td></tr>
+                                            <tr><td class="text-center">すごい</td><td class="font-bold text-emerald-700 text-center">たいへん、非常 (ひじょう) に</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">本当に</td><td class="font-bold text-emerald-700 text-center">誠(まこと)に</td></tr>
+                                            <tr><td class="text-center">すみません</td><td class="font-bold text-emerald-700 text-center">申(もう)し訳(わけ)ありません</td></tr>
+                                            <tr class="bg-slate-50"><td class="text-center">ありがとう</td><td class="font-bold text-emerald-700 text-center">誠(まこと)にありがとうございます</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg bg-slate-50">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-emerald-500 text-3xl">💬</span> 例文 (Contoh Kalimat)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">1. 明日、東京に行き<strong class="text-emerald-600">ます</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Besok, saya pergi ke Tokyo.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">2. 今日はとても暑い<strong class="text-emerald-600">です</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Hari ini panas sekali.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">3. トイレはあっちにあります <br>→ トイレは<strong class="text-emerald-600">あちらにございます</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Toilet ada di sana.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">4. これは新しいカタログです <br>→ こちらが新しいカタログ<strong class="text-emerald-600">でございます</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Ini adalah katalog baru.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-emerald-500 shadow-lg bg-emerald-50/40">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-emerald-500 text-3xl">☕</span> 会話 (Percakapan)</h2>
+                        <p class="text-sm text-slate-500 mb-6 italic text-center border-b-2 border-emerald-100 pb-2">場面(ばめん) : 喫茶店(きっさてん)での注文(ちゅうもん) (Situasi: Memesan di Kedai Kopi)</p>
+
+                        <div class="flex flex-col space-y-5 max-w-4xl mx-auto">
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn">
+                                <p class="text-xs text-emerald-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-emerald-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">いらっしゃいませ。メニューは<strong class="text-emerald-600">こちらでございます</strong>。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Selamat datang. Menunya adalah yang sebelah sini."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.1s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-emerald-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-emerald-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">ありがとう。今日のおすすめは何ですか。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-emerald-200 pt-1">"Terima kasih. Rekomendasi hari ini apa?"</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.2s">
+                                <p class="text-xs text-emerald-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-emerald-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed"><strong class="text-emerald-600">本日</strong>のケーキセットは<strong class="text-emerald-600">いかが</strong>でしょうか。とても人気があります。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Bagaimana dengan paket kue hari ini? Sangat populer lho."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.3s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-emerald-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-emerald-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">いいですね。じゃあ、それをお願いします。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-emerald-200 pt-1">"Boleh juga. Kalau begitu, saya pesan itu."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.4s">
+                                <p class="text-xs text-emerald-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-emerald-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">かしこまりました。お飲み物はコーヒーで<strong class="text-emerald-600">よろしい</strong>でしょうか。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Baik. Untuk minumannya, apakah kopi sudah sesuai?"</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.5s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-emerald-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-emerald-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">はい。あ、すみません。砂糖(さとう)とミルクはありますか。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-emerald-200 pt-1">"Ya. Ah, permisi. Apakah ada gula dan susu?"</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.6s">
+                                <p class="text-xs text-emerald-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-emerald-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">はい、テーブルの<strong class="text-emerald-600">そちらにございます</strong>。ご自由にお使いください。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Ya, ada di sebelah sana (di sisi meja pelanggan). Silakan ambil secukupnya."</p>
+                                </div>
+                            </div>
+                            
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.7s">
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-emerald-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">では、<strong class="text-emerald-600">少々</strong>お待ちください。<strong class="text-emerald-600">すぐに</strong>お持ちします。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Kalau begitu, mohon tunggu sebentar. Akan saya bawakan segera."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t-2 border-slate-200/60 text-left">
+                        <p class="text-xs font-bold text-slate-500 mb-1 tracking-wide">Sumber Materi / References:</p>
+                        <ol class="text-xs text-slate-500/80 list-decimal pl-4 space-y-1">
+                            <li>Buku Minna No Nihongo 2</li>
+                            <li>Website WkWkJapan</li>
+                            <li>Modul PPG Dalam Jabatan Bahasa Jepang tahun 2019 (Kemendikbud)</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        `,
+sonkeigo: `
+            <div class="space-y-8 animate-fadeIn">
+                <div class="text-center mb-6">
+                    <h1 class="text-4xl font-bold text-red-700 mb-2 jp-text">尊敬語</h1>
+                    <p class="text-lg text-slate-500 font-medium">(Sonkeigo)</p>
+                    <span class="inline-block px-4 py-1 bg-red-100 text-red-800 rounded-full text-sm mt-2 font-bold shadow-sm">Bahasa Hormat / Meninggikan</span>
+                </div>
+
+                <div class="w-full max-w-2xl mx-auto">
+                    <div class="rounded-2xl overflow-hidden shadow-md border-4 border-red-50">
+                        <img src="https://i.ibb.co.com/4gjPtBnV/sonkeiii.png" alt="Ilustrasi Materi Sonkeigo" class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <p class="text-center text-red-600/70 text-xs mt-2 font-medium tracking-wide">
+                        Courtesy of: <a href="https://wkwkjapan.com/tata-bahasa/bahasa-hormat-sonkei-go/" target="_blank" class="hover:underline hover:text-red-800 transition-colors">WkWkJapan</a>
+                    </p>
+                </div>
+
+                <div class="max-w-5xl mx-auto space-y-8">
+                    
+                    <div class="material-card p-6 border-t-4 border-red-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2"><span class="text-red-500 text-3xl">📌</span> Konsep Dasar</h2>
+                        
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <div class="flex-1">
+                                <p class="mb-4 text-slate-700 leading-relaxed text-justify">
+                                    <strong>尊敬語 (そんけいご)</strong> merupakan ragam bahasa hormat atau sopan yang secara khusus digunakan untuk <strong>meninggikan lawan bicara</strong>.
+                                </p>
+                            </div>
+                            <div class="lg:w-1/2">
+                                <div class="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-xl border border-red-100 h-full flex flex-col justify-center">
+                                    <p class="text-sm text-red-800 font-bold mb-3 flex items-center gap-2 border-b border-red-200 pb-2">
+                                        <span>👑</span> Kapan Sonkeigo digunakan?
+                                    </p>
+                                    <ul class="list-disc pl-5 space-y-2 text-sm text-red-900 font-medium">
+                                        <li>Berbicara kepada orang yang usianya <strong>lebih tinggi atau lebih tua</strong>.</li>
+                                        <li>Berinteraksi dengan orang yang memiliki <strong>status sosial atau jabatan yang lebih tinggi</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-red-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-red-500 text-3xl">⚙️</span> 文法 (Tata Bahasa)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 1 (Bentuk Pasif)</span>
+                                <p class="text-lg font-black jp-text text-slate-800 mb-2">ます形 + れる / られる</p>
+                                <p class="text-sm text-slate-600 font-medium">Kata kerja bentuk masu + Rare / rareru</p>
+                                <ul class="text-xs text-slate-600 space-y-1 mt-2 border-t border-slate-100 pt-2 text-center">
+                                    <li><strong class="text-red-600">Kel 1 (れる):</strong> 読みます → 読まれる</li>
+                                    <li><strong class="text-red-600">Kel 2 (られる):</strong> 食べます → 食べられる</li>
+                                    <li><strong class="text-red-600">Kel 3:</strong> 来ます → 来られる, します → される</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 2</span>
+                                <p class="text-lg font-black jp-text text-slate-800 mb-2">お + ます形 + になる</p>
+                                <p class="text-sm text-slate-600 font-medium">O + Kata kerja bentuk masu + ni naru</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 3 (Permintaan)</span>
+                                <p class="text-lg font-black jp-text text-slate-800 mb-2">お + ます形 + ください</p>
+                                <p class="text-sm text-slate-600 font-medium">O + Kata kerja bentuk masu + kudasai</p>
+                                <div class="mt-2 pt-2 border-t border-slate-100 text-center">
+                                    <p class="text-lg font-black jp-text text-slate-800 mb-1">ご + 名詞 + ください</p>
+                                    <p class="text-sm text-slate-600 font-medium">Go + Kata benda + kudasai</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-red-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-red-500 text-3xl">📖</span> 言葉 (Kosakata Khusus)</h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                            
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-red-100 pb-2 text-center">Perubahan Kata Kerja</h3>
+                                <div class="overflow-x-auto max-h-[500px] border border-slate-200 rounded-lg">
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead class="sticky top-0 bg-red-50 shadow-sm">
+                                            <tr>
+                                                <th class="w-1/3 text-center">普通体 (Biasa)</th>
+                                                <th class="w-1/3 text-center">丁寧語 (Sopan)</th>
+                                                <th class="w-1/3 text-red-800 text-center">尊敬語 (Meninggikan)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-sm md:text-base jp-text">
+                                            <tr><td>いる</td><td>います</td><td class="font-bold text-red-700">いらっしゃいます / おいでになります</td></tr>
+                                            <tr class="bg-slate-50"><td>行く</td><td>行きます</td><td class="font-bold text-red-700">いらっしゃいます / おいでになります</td></tr>
+                                            <tr><td>言う</td><td>言います</td><td class="font-bold text-red-700">おっしゃいます</td></tr>
+                                            <tr class="bg-slate-50"><td>来る</td><td>来ます</td><td class="font-bold text-red-700">いらっしゃいます / お見えになります / お越(こ)しになります</td></tr>
+                                            <tr><td>知る</td><td>知ります</td><td class="font-bold text-red-700">ご存知(ぞんじ)です</td></tr>
+                                            <tr class="bg-slate-50"><td>する</td><td>します</td><td class="font-bold text-red-700">なさいます</td></tr>
+                                            <tr><td>食べる / 飲む</td><td>食べます / 飲みます</td><td class="font-bold text-red-700">召(め)し上がります</td></tr>
+                                            <tr class="bg-slate-50"><td>見る</td><td>見ます</td><td class="font-bold text-red-700">ご覧(らん)になります</td></tr>
+                                            <tr><td>寝る</td><td>寝ます</td><td class="font-bold text-red-700">お休みになります</td></tr>
+                                            <tr class="bg-slate-50"><td>死ぬ</td><td>死にます</td><td class="font-bold text-red-700">お亡くなりになります</td></tr>
+                                            <tr><td>くれる</td><td>くれます</td><td class="font-bold text-red-700">くださいます</td></tr>
+                                            <tr class="bg-slate-50"><td>着(き)る</td><td>着(き)ます</td><td class="font-bold text-red-700">お召(め)しになります</td></tr>
+                                            <tr><td>上げる</td><td>上げます</td><td class="font-bold text-red-700">差(さ)し上げます</td></tr>
+                                            <tr class="bg-slate-50"><td>会う</td><td>会います</td><td class="font-bold text-red-700">お会いくださります</td></tr>
+                                            <tr><td>思う</td><td>思います</td><td class="font-bold text-red-700">思召(おぼしめ)します</td></tr>
+                                            <tr class="bg-slate-50"><td>良く</td><td>いいです</td><td class="font-bold text-red-700">よろしいです</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="space-y-8">
+                                <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-red-100 pb-2 text-center">Penambahan Awalan お / ご</h3>
+                                
+                                <div>
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead><tr><th class="text-red-800 text-center">Awalan お</th><th class="text-center">Contoh</th></tr></thead>
+                                        <tbody class="text-sm jp-text">
+                                            <tr><td class="font-semibold">名詞 (Kata Benda)</td><td>お国、お名前、お仕事</td></tr>
+                                            <tr class="bg-slate-50"><td class="font-semibold">な形容詞 (Kata Sifat Na)</td><td>お元気、お上手、お暇</td></tr>
+                                            <tr><td class="font-semibold">い形容詞 (Kata Sifat I)</td><td>お忙しい、お若い</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div>
+                                    <table class="w-full text-center border-collapse material-table">
+                                        <thead><tr><th class="text-red-800 text-center">Awalan ご</th><th class="text-center">Contoh</th></tr></thead>
+                                        <tbody class="text-sm jp-text">
+                                            <tr><td class="font-semibold">名詞 (Kata Benda)</td><td>ご家族、ご意見、ご旅行</td></tr>
+                                            <tr class="bg-slate-50"><td class="font-semibold">な形容詞 (Kata Sifat Na)</td><td>ご熱心、ご親切</td></tr>
+                                            <tr><td class="font-semibold">副詞 (Adverbia)</td><td>ご自由に</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-red-500 shadow-lg bg-slate-50">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-red-500 text-3xl">💬</span> 例文 (Contoh Kalimat)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">1. 先生はこの本を<strong class="text-red-600">読まれましたか</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Apakah Guru sudah membaca buku ini?</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">2. 社長は明日、大阪へ<strong class="text-red-600">出張されます</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Direktur akan melakukan perjalanan dinas ke Osaka besok</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">3. 社長はもう<strong class="text-red-600">お帰りになりました</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Presiden Direktur sudah pulang.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">4. どうぞ、このペンを<strong class="text-red-600">お使いください</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Silakan, gunakan pena ini.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center md:col-span-2">
+                                <p class="jp-text text-lg text-slate-800">5. 明日のイベントに、ぜひ<strong class="text-red-600">ご参加ください</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Mohon partisipasinya/kehadirannya dalam acara besok.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-red-500 shadow-lg bg-red-50/40">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-red-500 text-3xl">☕</span> 会話 (Percakapan)</h2>
+                        <p class="text-sm text-slate-500 mb-6 italic text-center border-b-2 border-red-100 pb-2">場面(ばめん) : お土産屋(おみやげや)で (Situasi: Di Toko Oleh-oleh)</p>
+
+                        <div class="flex flex-col space-y-5 max-w-4xl mx-auto">
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn">
+                                <p class="text-xs text-red-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-red-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">いらっしゃいませ。何か<strong class="text-red-600">お探し</strong>ですか。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Selamat datang. Apakah Anda sedang mencari sesuatu?"</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.1s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-red-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-red-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">ええ、京都のお菓子(かし)を見ています。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-red-200 pt-1">"Ya, saya sedang melihat-lihat kue khas Kyoto."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.2s">
+                                <p class="text-xs text-red-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-red-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">それなら、こちらを<strong class="text-red-600">ご覧(らん)ください</strong>。一番人気ですよ。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Kalau begitu, silakan lihat yang sebelah sini. Ini paling populer, lho."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.3s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-red-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-red-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">おいしそうですね。試食(ししょく)はありますか。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-red-200 pt-1">"Kelihatannya enak, ya. Apakah ada sampel untuk dicicipi?"</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.4s">
+                                <p class="text-xs text-red-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-red-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">はい、あちらで<strong class="text-red-600">ご自由に食べられます</strong>。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Ya, Anda bisa mencicipinya dengan bebas di sebelah sana."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.5s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-red-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-red-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">ありがとう。先生へのお土産にいいですね。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-red-200 pt-1">"Terima kasih. Ini bagus untuk oleh-oleh guru saya."</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.6s">
+                                <p class="text-xs text-red-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 店員 (Pegawai)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-red-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">そうですね。先生は甘い物をよく<strong class="text-red-600">食べられます</strong>か。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">"Benar sekali. Apakah guru Anda sering makan makanan manis?"</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.7s">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客 (Pelanggan) <span>🧑🏻</span></p>
+                                <div class="bg-red-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-red-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">はい、大好きですよ。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-red-200 pt-1">"Ya, beliau sangat suka."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t-2 border-slate-200/60 text-left">
+                        <p class="text-xs font-bold text-slate-500 mb-1 tracking-wide">Sumber Materi / References:</p>
+                        <ol class="text-xs text-slate-500/80 list-decimal pl-4 space-y-1">
+                            <li>Buku Minna No Nihongo 2</li>
+                            <li>Website WkWkJapan</li>
+                            <li>Modul PPG Dalam Jabatan Bahasa Jepang tahun 2019 (Kemendikbud)</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        `,
+kenjougo: `
+            <div class="space-y-8 animate-fadeIn">
+                <div class="text-center mb-6">
+                    <h1 class="text-4xl font-bold text-blue-700 mb-2 jp-text">謙譲語</h1>
+                    <p class="text-lg text-slate-500 font-medium">(Kenjougo)</p>
+                    <span class="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm mt-2 font-bold shadow-sm">Bahasa Hormat / Merendah</span>
+                </div>
+
+                <div class="w-full max-w-2xl mx-auto">
+                    <div class="rounded-2xl overflow-hidden shadow-md border-4 border-blue-50">
+                        <img src="https://i.ibb.co.com/7xqJFNH5/kenjouu-I.png" alt="Ilustrasi Materi Kenjougo" class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <p class="text-center text-blue-600/70 text-xs mt-2 font-medium tracking-wide">
+                        Courtesy of: <a href="https://wkwkjapan.com/tata-bahasa/bahasa-merendahkan-diri-i-ii/" target="_blank" class="hover:underline hover:text-blue-800 transition-colors">WkWkJapan</a>
+                    </p>
+                </div>
+
+                <div class="max-w-5xl mx-auto space-y-8">
+                    
+                    <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2"><span class="text-blue-500 text-3xl">📌</span> Konsep Dasar</h2>
+                        
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <div class="flex-1">
+                                <p class="mb-4 text-slate-700 leading-relaxed text-justify">
+                                    <strong>謙譲語 (けんじょうご)</strong> merupakan ragam bahasa hormat atau sopan yang digunakan untuk <strong>merendahkan diri sendiri</strong> terhadap lawan bicara. Berbeda dengan Sonkeigo yang fokus pada lawan bicara, Kenjougo digunakan untuk menunjukkan sikap sederhana dan rendah hati saat kita berbicara tentang tindakan yang kita lakukan sendiri.
+                                </p>
+                            </div>
+                            
+                            <div class="lg:w-1/2">
+                                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-100 h-full flex flex-col justify-center">
+                                    <p class="text-sm text-blue-800 font-bold mb-3 flex items-center gap-2 border-b border-blue-200 pb-2">
+                                        <span>🙇</span> Fokus Kenjougo
+                                    </p>
+                                    <ul class="list-disc pl-5 space-y-2 text-sm text-blue-900 font-medium">
+                                        <li>Subjek dari kalimat yang menggunakan Kenjougo adalah <strong>Diri Sendiri</strong> (atau pihak/kelompok kita sendiri).</li>
+                                        <li>Tujuannya untuk menurunkan posisi diri sendiri demi secara tidak langsung <strong>menghormati lawan bicara</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-blue-500 text-3xl">⚙️</span> 文法 (Tata Bahasa)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 1</span>
+                                <p class="text-lg font-black jp-text text-slate-800 mb-2">お + ます形 + します</p>
+                                <p class="text-sm text-slate-600 font-medium">O + Kata kerja bentuk masu + shimasu</p>
+                                <div class="mt-2 pt-2 border-t border-slate-100">
+                                    <p class="text-lg font-black jp-text text-slate-800 mb-2">ご + 名詞 + します</p>
+                                    <p class="text-sm text-slate-600 font-medium">Go + Kata benda + shimasu</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 2</span>
+                                <p class="text-lg font-black jp-text text-slate-800 mb-2">お + ます形 + 致(いた)す</p>
+                                <p class="text-sm text-slate-600 font-medium">O + Kata kerja bentuk masu + itasu</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded mb-2">Pola 3</span>
+                                <p class="text-lg font-black jp-text text-slate-800 mb-2">ます形 + 頂(いただ)く</p>
+                                <p class="text-sm text-slate-600 font-medium">Kata kerja bentuk masu + itadaku</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-blue-500 text-3xl">📖</span> 言葉 (Kosakata Khusus)</h2>
+                        
+                        <h3 class="text-lg font-bold text-slate-700 mb-3 border-b-2 border-blue-100 pb-2 text-center">Perubahan Kata Kerja</h3>
+                        <div class="overflow-x-auto max-h-[600px] border border-slate-200 rounded-lg">
+                            <table class="w-full text-center border-collapse material-table">
+                                <thead class="sticky top-0 bg-blue-50 shadow-sm">
+                                    <tr>
+                                        <th class="w-1/3 text-center">普通体 (Biasa)</th>
+                                        <th class="w-1/3 text-center">丁寧語 (Sopan)</th>
+                                        <th class="w-1/3 text-blue-800 text-center">謙譲語 (Merendah)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm md:text-base jp-text">
+                                    <tr><td>いる</td><td>います</td><td class="font-bold text-blue-700">おります</td></tr>
+                                    <tr class="bg-slate-50"><td>行く</td><td>行きます</td><td class="font-bold text-blue-700">参(まい)ります</td></tr>
+                                    <tr><td>言う</td><td>言います</td><td class="font-bold text-blue-700">申(もう)します / 申(もう)し上げます</td></tr>
+                                    <tr class="bg-slate-50"><td>来る</td><td>来ます</td><td class="font-bold text-blue-700">伺(うかが)います</td></tr>
+                                    <tr><td>知る / 知らない</td><td>知ります / 知りません</td><td class="font-bold text-blue-700">存(ぞん)じます / 存(ぞん)じ上げます / 存(ぞん)じておりません</td></tr>
+                                    <tr class="bg-slate-50"><td>する</td><td>します</td><td class="font-bold text-blue-700">致(いた)します</td></tr>
+                                    <tr><td>食べる</td><td>食べます</td><td class="font-bold text-blue-700">頂(いただ)きます</td></tr>
+                                    <tr class="bg-slate-50"><td>飲む</td><td>飲みます</td><td class="font-bold text-blue-700">頂戴(ちょうだい)します</td></tr>
+                                    <tr><td>見る</td><td>見ます</td><td class="font-bold text-blue-700">拝見(はいけん)します / 拝見(はいけん)致(い)します</td></tr>
+                                    <tr class="bg-slate-50"><td>着(き)る / 上げる</td><td>着(き)ます / 上げます</td><td class="font-bold text-blue-700">着(き)させて頂(いただ)きます / 差(さ)し上げます</td></tr>
+                                    <tr><td>会う</td><td>会います</td><td class="font-bold text-blue-700">お目にかかります</td></tr>
+                                    <tr class="bg-slate-50"><td>もらう</td><td>もらいます</td><td class="font-bold text-blue-700">頂(いただ)きます / 頂戴(ちょうだい)します</td></tr>
+                                    <tr><td>死ぬ</td><td>死にます</td><td class="font-bold text-blue-700">亡くなります</td></tr>
+                                    <tr class="bg-slate-50"><td>良く</td><td>いいです</td><td class="font-bold text-blue-700">結構(けっこう)です</td></tr>
+                                    <tr><td>問う</td><td>問います</td><td class="font-bold text-blue-700">伺(うかが)います / お伺(うかが)いします</td></tr>
+                                    <tr class="bg-slate-50"><td>聞く</td><td>聞きます</td><td class="font-bold text-blue-700">伺(うかが)います / 拝聴(はいちょう)します</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg bg-slate-50">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-blue-500 text-3xl">💬</span> 例文 (Contoh Kalimat)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">1. ここで<strong class="text-blue-600">お待ちします</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Saya akan menunggu anda di sini.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">2. 新しい製品を<strong class="text-blue-600">ご紹介します</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Saya akan memperkenalkan produk baru.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">3. お送りいただいた資料、確かに<strong class="text-blue-600">読ませて頂(いただ)きました</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Dokumen yang Anda kirimkan, sudah saya baca dengan baik.</p>
+                            </div>
+                            <div class="chat-bubble-left shadow-sm border border-slate-200 h-full flex flex-col justify-center">
+                                <p class="jp-text text-lg text-slate-800">4. 字が小さくて見えにくいですね。私が代わりに<strong class="text-blue-600">お読み致(いた)します</strong></p>
+                                <p class="text-sm text-slate-500 mt-1 italic">Tulisannya kecil dan sulit dibaca, ya. Biar saya yang membacakannya sebagai gantinya.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-card p-6 border-t-4 border-blue-500 shadow-lg bg-blue-50/40">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span class="text-blue-500 text-3xl">☕</span> 会話 (Percakapan)</h2>
+                        <p class="text-sm text-slate-500 mb-6 italic text-center border-b-2 border-blue-100 pb-2">場面(ばめん) : 受付(うけつけ)で (Situasi: Di Resepsionis)</p>
+
+                        <div class="flex flex-col space-y-5 max-w-4xl mx-auto">
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn">
+                                <p class="text-xs text-slate-600 font-bold mb-1 mr-3 flex items-center gap-1">客・山田 (Tamu) <span>🧑🏻</span></p>
+                                <div class="bg-blue-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-blue-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">すみません。本日２時に約束しております、ABC社の山田と<strong class="text-blue-600">申(もう)します</strong>。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-blue-200 pt-1">Permisi. Nama saya adalah Yamada dari perusahaan ABC yang ada janji hari ini jam 2.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.1s">
+                                <p class="text-xs text-blue-700 font-bold mb-1 ml-3 flex items-center gap-1"><span>💁🏻</span> 受付・鈴木 (Resepsionis)</p>
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-blue-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">いらっしゃいませ。山田様ですね。<strong class="text-blue-600">お待ちしておりました</strong>。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">Selamat datang. Bapak Yamada ya. Kami sudah menunggu Anda.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.2s">
+                                <div class="bg-blue-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-blue-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">恐(おそ)れ入ります。佐藤(さとう)部長はいらっしゃいますか。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-blue-200 pt-1">Maaf merepotkan. Apakah Manajer Sato ada?</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.3s">
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-blue-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">はい、おります。ただいま会議室へ<strong class="text-blue-600">ご案内いたします</strong>。こちらへどうぞ。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">Ya, ada (di kantor). Sekarang saya akan mengantarkan/memandu Anda ke ruang rapat. Mari lewat sini.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.4s">
+                                <div class="bg-blue-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-blue-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">ありがとうございます。失礼します。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-blue-200 pt-1">Terima kasih. Permisi.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.5s">
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-blue-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">（部屋の前で）どうぞ、中にお入りください。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">(Di depan ruangan) Silakan, masuk ke dalam.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.6s">
+                                <div class="bg-blue-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-blue-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">素敵(すてき)なオフィスですね。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-blue-200 pt-1">Kantor yang bagus ya.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.7s">
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-blue-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">ありがとうございます。すぐに資料と冷たいお茶を<strong class="text-blue-600">お持ちします</strong>。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">Terima kasih. Saya akan segera membawakan dokumen dan teh dingin.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-end w-11/12 md:w-3/4 flex flex-col items-end animate-fadeIn" style="animation-delay: 0.8s">
+                                <div class="bg-blue-100 rounded-2xl rounded-tr-none p-4 shadow-sm border border-blue-200 text-right">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">すみません。よろしく<strong class="text-blue-600">致(いた)します</strong>。</p>
+                                    <p class="text-sm text-slate-600 mt-2 italic border-t border-blue-200 pt-1">Maaf (merepotkan). Mohon bantuannya/kerjasamanya.</p>
+                                </div>
+                            </div>
+
+                            <div class="self-start w-11/12 md:w-3/4 animate-fadeIn" style="animation-delay: 0.9s">
+                                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-blue-100">
+                                    <p class="jp-text text-lg text-slate-800 font-medium leading-relaxed">では、部長が参りますまで、少々お待ちください。</p>
+                                    <p class="text-sm text-slate-500 mt-2 italic border-t border-slate-100 pt-1">Kalau begitu, tolong tunggu sebentar sampai manajer datang.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t-2 border-slate-200/60 text-left">
+                        <p class="text-xs font-bold text-slate-500 mb-1 tracking-wide">Sumber Materi / References:</p>
+                        <ol class="text-xs text-slate-500/80 list-decimal pl-4 space-y-1">
+                            <li>Buku Minna No Nihongo 2</li>
+                            <li>Website WkWkJapan</li>
+                            <li>Modul PPG Dalam Jabatan Bahasa Jepang tahun 2019 (Kemendikbud)</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        `,
+    };
+
+    const materialMenuSlides = {
+        teineigo: 7,
+        sonkeigo: 8,
+        kenjougo: 9
+    };
+    
+// Quiz URLs (Sudah Dipecah per Materi)
+    const quizUrls = {
+        teineigo: {
+            1: "https://wayground.com/embed/quiz/69990ff5bb347c6cead7aa46", // Ganti dengan link embed Teineigo Latihan 1
+            2:`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 20px 10px;
+                            background: #ffffff;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            min-height: 100vh;
+                            box-sizing: border-box;
+                        }
+                        /* ID di bawah ini sudah saya samakan dengan ID div-nya */
+                        #liveworksheet8358915 {
+                            max-width: 900px !important;
+                            margin: 0 auto !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="liveworksheet8358915" style="width:100%">
+                        <span id="lwslink8358915"><a href="https://www.liveworksheets.com/worksheet/id/esl-grammar/8358915">Teineigo</a>, an interactive worksheet by <a href="https://www.liveworksheets.com/u/muhammadrizalnugraha">muhammadrizalnugraha</a>
+                        <br><a href="https://www.liveworksheets.com">live<b>worksheets.com</b></a></span>
+                    </div>
+                    <script src="https://www.liveworksheets.com/embed/embed.js?v=1"><\/script>
+                    <script>
+                        loadliveworksheet(8358915,'bs4v',1634,'www','new');
+                    <\/script>
+                </body>
+                </html>
+            `
+        },
+        sonkeigo: {
+            1: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 20px 10px;
+                            background: #ffffff;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            min-height: 100vh;
+                            box-sizing: border-box;
+                        }
+                        /* ID di bawah ini sudah disesuaikan dengan ID widget yang baru */
+                        #liveworksheet8368676 {
+                            max-width: 900px !important;
+                            margin: 0 auto !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="liveworksheet8368676" style="width:100%">
+                        <span id="lwslink8368676"><a href="https://www.liveworksheets.com/worksheet/ja/esl-grammar/8368676">Sonkeigo</a>, an interactive worksheet by <a href="https://www.liveworksheets.com/u/muhammadrizalnugraha">muhammadrizalnugraha</a>
+                        <br><a href="https://www.liveworksheets.com">live<b>worksheets.com</b></a></span>
+                    </div>
+                    <script src="https://www.liveworksheets.com/embed/embed.js?v=1"><\/script>
+                    <script>
+                        loadliveworksheet(8368676,'nsed',1634,'www','new');
+                    <\/script>
+                </body>
+                </html>
+            `,
+            2: "https://quiz.zep.us/en/play/Vqmg0O" // Link Sonkeigo Latihan 2
+        },
+        kenjougo: {
+            1: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 20px 10px;
+                            background: #ffffff;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            min-height: 100vh;
+                            box-sizing: border-box;
+                        }
+                        .wordwall-wrapper {
+                            width: 100%;
+                            max-width: 800px; /* Batas maksimal lebar */
+                            margin: 0 auto;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        /* Memaksa Wordwall tampil responsif dan proporsional */
+                        .wordwall-wrapper iframe {
+                            width: 100%;
+                            min-height: 500px; /* Menjaga agar game tidak terpotong */
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="wordwall-wrapper">
+                        <iframe style="max-width:100%" src="https://wordwall.net/embed/afcb77ad28d745bd9f63947aa1539dc1?themeId=54&templateId=36&fontStackId=21" width="500" height="380" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </body>
+                </html>
+            `,
+            2: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 20px 10px;
+                            background: #ffffff;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            min-height: 100vh;
+                            box-sizing: border-box;
+                        }
+                        .educaplay-wrapper {
+                            width: 100%;
+                            max-width: 800px;
+                            margin: 0 auto;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .educaplay-wrapper iframe {
+                            max-width: 100%;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="educaplay-wrapper">
+                        <iframe allow="fullscreen; autoplay; allow-top-navigation-by-user-activation" allowfullscreen width="795" height="690" frameborder="0" src="https://www.educaplay.com/game/27920146-o_x.html"></iframe>
+                    </div>
+                </body>
+                </html>
+            `
+        }
+    };
+    
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...config, ...newConfig };
+          updateUI();
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            { get: () => cfg.primary_color || defaultConfig.primary_color, set: (value) => { cfg.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); } },
+            { get: () => cfg.accent_color || defaultConfig.accent_color, set: (value) => { cfg.accent_color = value; window.elementSdk.setConfig({ accent_color: value }); } },
+            { get: () => cfg.gold_color || defaultConfig.gold_color, set: (value) => { cfg.gold_color = value; window.elementSdk.setConfig({ gold_color: value }); } }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ["main_slogan", cfg.main_slogan || defaultConfig.main_slogan],
+          ["creator_name", cfg.creator_name || defaultConfig.creator_name]
+        ])
+      });
+    }
+    
+    function updateUI() {
+      const creatorEl = document.getElementById('creator-name');
+      if (creatorEl) creatorEl.textContent = config.creator_name || defaultConfig.creator_name;
+      document.documentElement.style.setProperty('--primary-color', config.primary_color || defaultConfig.primary_color);
+      document.querySelectorAll('.highlight-red').forEach(el => el.style.color = config.accent_color || defaultConfig.accent_color);
+      document.querySelectorAll('.highlight-gold').forEach(el => el.style.color = config.gold_color || defaultConfig.gold_color);
+    }
+    
+    // Slide Navigation
+    function goToSlide(slideNum) {
+      if (slideNum === currentSlide) return;
+      
+      const currentSlideEl = document.getElementById(`slide-${currentSlide}`);
+      const nextSlideEl = document.getElementById(`slide-${slideNum}`);
+      const bgContainer = document.getElementById('background-container');
+      
+      if (!currentSlideEl || !nextSlideEl) return;
+      
+      // Update background blur logic
+      if (slideNum === 1) {
+        bgContainer.classList.remove('bg-blur');
+      } else {
+        bgContainer.classList.add('bg-blur');
+      }
+      
+      // Animate transition
+      currentSlideEl.classList.add('exit-left');
+      currentSlideEl.classList.remove('active');
+      
+      // Stop video if leaving video slide
+      if(currentSlide === 11) {
+         const videoFrame = document.getElementById('video-frame');
+         videoFrame.src = ""; 
+      }
+      
+      // Close quiz frame if leaving quiz level slide without closing modal
+      if([12, 13, 14].includes(currentSlide)) {
+          closeQuizModal('teineigo');
+          closeQuizModal('sonkeigo');
+          closeQuizModal('kenjougo');
+      }
+
+      setTimeout(() => {
+        nextSlideEl.classList.add('active');
+        currentSlide = slideNum;
+        // Refresh Quiz UI logic in case of state updates
+        updateQuizLevelUI();
+      }, 100);
+      
+      setTimeout(() => {
+        currentSlideEl.classList.remove('exit-left');
+      }, 600);
+    }
+
+    // --- LOGIKA MATERI (UPDATED FOR INJECTED HTML) ---
+    function openContent(type, mode) {
+        currentMaterial = type;
+        if (mode === 'reading') {
+            // Inject the HTML string into the container
+            const container = document.getElementById('reading-scroll-area');
+            container.innerHTML = studyMaterials[type] || '<p class="text-center text-slate-500 mt-10">Materi belum tersedia.</p>';
+            
+            // Update Title
+            const titleMap = {teineigo: "丁寧語", sonkeigo: "尊敬語", kenjougo: "謙譲語"};
+            document.querySelector('.reading-title').textContent = "Materi Bacaan: " + titleMap[type];
+            
+            // Scroll to top
+            container.scrollTop = 0;
+            
+            goToSlide(10);
+        } else if (mode === 'video') {
+        // 1. Ambil data dari database yang kita buat di Langkah 2
+        const dataVideo = videoDatabase[type];
+
+        // 2. Masukkan URL Video ke iframe
+        document.getElementById('video-frame').src = dataVideo.url;
+
+        // 3. Update Teks Sumber & Link Channel
+        const sourceLinkElement = document.getElementById('video-source-link');
+        sourceLinkElement.textContent = dataVideo.channelName; // Ubah teks nama channel
+        sourceLinkElement.href = dataVideo.channelLink;        // Ubah link tujuan klik
+        
+        // 4. Update Judul Header
+        const titleMap = {teineigo: "丁寧語", sonkeigo: "尊敬語", kenjougo: "謙譲語"};
+        document.querySelector('.video-title').textContent = "Video Pembelajaran: " + titleMap[type];
+        
+        // 5. Pindah ke Slide Video
+        goToSlide(11);
+    }
+}
+
+    function switchContentMode(targetMode) {
+        openContent(currentMaterial, targetMode);
+    }
+
+    function goBackFromContent() {
+        const targetSlide = materialMenuSlides[currentMaterial];
+        document.getElementById('video-frame').src = "";
+        goToSlide(targetSlide);
+    }
+
+    function nextMaterial() {
+        if (currentMaterial === 'teineigo') {
+            currentMaterial = 'sonkeigo';
+            goToSlide(8);
+        } else if (currentMaterial === 'sonkeigo') {
+            currentMaterial = 'kenjougo';
+            goToSlide(9);
+        } else {
+            goToSlide(4);
+        }
+    }
+
+    // --- LOGIKA QUIZ ---
+
+function openQuizEmbed(level, part) {
+        currentQuizLevel = level;
+        currentQuizPart = part;
+        const modal = document.getElementById(`modal-${level}`);
+        
+        // 1. Mengambil iframe lama dan elemen pembungkusnya
+        const oldFrame = document.getElementById(`frame-${level}`);
+        const parent = oldFrame.parentNode;
+        
+        // 2. Membuat iframe baru yang 100% bersih untuk mencegah "Ghosting Bug"
+        const newFrame = document.createElement('iframe');
+        newFrame.id = oldFrame.id;
+        newFrame.className = oldFrame.className; // Mempertahankan desain CSS (w-full h-full dll)
+        newFrame.setAttribute('allowfullscreen', 'true');
+        newFrame.setAttribute('frameborder', '0');
+        
+        // 3. Memasukkan data kuis baru ke iframe yang bersih
+        const quizData = quizUrls[level][part];
+        if (quizData.startsWith("http")) {
+            newFrame.src = quizData; 
+        } else {
+            newFrame.srcdoc = quizData; 
+        }
+        
+        // 4. Mengganti secara paksa iframe lama dengan yang baru di dalam HTML
+        parent.replaceChild(newFrame, oldFrame);
+        
+        modal.classList.remove('hidden');
+    }
+
+    function closeQuizModal(level) {
+        const modal = document.getElementById(`modal-${level}`);
+        const frame = document.getElementById(`frame-${level}`);
+        if(modal && frame) {
+            frame.src = '';
+            modal.classList.add('hidden');
+        }
+    }
+
+    function markQuizDone(level) {
+        if(currentQuizPart === 1) {
+            quizState[level].p1 = true;
+        } else {
+            quizState[level].p2 = true;
+        }
+        
+        closeQuizModal(level);
+        checkLevelCompletion(level);
+        updateQuizLevelUI();
+    }
+
+    function checkLevelCompletion(level) {
+        const state = quizState[level];
+        if (state.p1 && state.p2) {
+            const actionDiv = document.getElementById(`action-${level}`);
+            if(actionDiv) {
+                actionDiv.classList.remove('hidden');
+                actionDiv.classList.add('flex');
+            }
+        }
+    }
+
+    function unlockNextLevel(nextLevelName) {
+        if(nextLevelName === 'sonkeigo') {
+            quizState.sonkeigo.unlocked = true;
+        } else if (nextLevelName === 'kenjougo') {
+            quizState.kenjougo.unlocked = true;
+        }
+        updateQuizLevelUI();
+        goToSlide(5); // Kembali ke Peta
+    }
+
+    function resetAllQuizzes() {
+        quizState = {
+            teineigo: { p1: false, p2: false, unlocked: true },
+            sonkeigo: { p1: false, p2: false, unlocked: false },
+            kenjougo: { p1: false, p2: false, unlocked: false }
+        };
+        
+        // Hide all action buttons
+        ['teineigo', 'sonkeigo', 'kenjougo'].forEach(level => {
+            const actionDiv = document.getElementById(`action-${level}`);
+            if(actionDiv) {
+                actionDiv.classList.add('hidden');
+                actionDiv.classList.remove('flex');
+            }
+        });
+
+        updateQuizLevelUI();
+        showNotification('🔄 Progress Quiz telah di-reset!');
+    }
+
+    function updateQuizLevelUI() {
+        // 1. Update Map (Slide 5) Locks
+        const btnSonkeigo = document.getElementById('btn-level-sonkeigo');
+        const btnKenjougo = document.getElementById('btn-level-kenjougo');
+
+        if(quizState.sonkeigo.unlocked) {
+            btnSonkeigo.classList.remove('quiz-locked');
+        } else {
+            btnSonkeigo.classList.add('quiz-locked');
+        }
+
+        if(quizState.kenjougo.unlocked) {
+            btnKenjougo.classList.remove('quiz-locked');
+        } else {
+            btnKenjougo.classList.add('quiz-locked');
+        }
+
+        // 2. Update Card Styles (Green Border/Checkmark) inside level slides
+        ['teineigo', 'sonkeigo', 'kenjougo'].forEach(level => {
+            const card1 = document.getElementById(`card-${level}-1`);
+            const card2 = document.getElementById(`card-${level}-2`);
+            
+            if(quizState[level].p1) card1.classList.add('exercise-completed');
+            else card1.classList.remove('exercise-completed');
+
+            if(quizState[level].p2) card2.classList.add('exercise-completed');
+            else card2.classList.remove('exercise-completed');
+            
+            const actionDiv = document.getElementById(`action-${level}`);
+            if(quizState[level].p1 && quizState[level].p2) {
+                actionDiv.classList.remove('hidden');
+                actionDiv.classList.add('flex');
+            } else {
+                actionDiv.classList.add('hidden');
+                actionDiv.classList.remove('flex');
+            }
+        });
+    }
+
+    function capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 px-6 py-3 bg-ub-blue text-white rounded-full shadow-lg z-50 fade-in-up';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => notification.remove(), 500);
+      }, 3000);
+    }
+    
+   document.addEventListener('DOMContentLoaded', () => {
+      updateUI();
+      updateQuizLevelUI();
+      
+      // --- FITUR STUDY TIME NOTIFICATION ---
+      let studyMinutes = 0;
+      
+      // Penghitung waktu berjalan setiap 60.000 milidetik (1 Menit)
+      setInterval(() => {
+          studyMinutes++;
+          
+          // Pengingat di menit ke-15 (Motivasi)
+          if (studyMinutes === 15) {
+              showNotification('⏱️ Kamu sudah belajar 15 menit. Bagus sekali! Tetap semangat!');
+          } 
+          // Pengingat di menit ke-30 (Istirahat/Pomodoro)
+          else if (studyMinutes === 30) {
+              showNotification('☕ Sudah 30 menit! Jangan lupa minum air dan istirirahat sejenak ya.');
+          } 
+          // Pengingat di menit ke-60 (Peringatan Mata)
+          else if (studyMinutes === 60) {
+              showNotification('🏆 Luar biasa! 1 jam belajar 敬語 (Keigo). Beri matamu istirahat ya!');
+          }
+      }, 60000); // 60000 ms = 1 menit
+      
+    });
+  </script>
+ </body>
+</html>
